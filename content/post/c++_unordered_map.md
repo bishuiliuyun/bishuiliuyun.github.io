@@ -6,7 +6,7 @@ draft: true
 
 # unordered_map
 
-这是一个简单的测试例子，仅仅用于测试博客的样式
+简单的测试例子
 ```cpp
 #include <string.h>
 #include <iostream>
