@@ -1,0 +1,200 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>fflush 和 fsync的区别 - Even - A super concise theme for Hugo</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="None"><meta name=description content="背景 指导新人在Apache Http Server(httpd) + Axis2/C 搭建的系统中新增调试日志，原计划是利用系统中打印日志的方式打印，但是修改程序后编译失败且评估发现此方案会耗"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.62.2 with theme even"><link rel=canonical href=http://localhost:1313/post/fflush_fsync/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><link href=/dist/even.c2a46f00.min.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="fflush 和 fsync的区别"><meta property="og:description" content="背景 指导新人在Apache Http Server(httpd) + Axis2/C 搭建的系统中新增调试日志，原计划是利用系统中打印日志的方式打印，但是修改程序后编译失败且评估发现此方案会耗"><meta property="og:type" content="article"><meta property="og:url" content="http://localhost:1313/post/fflush_fsync/"><meta property="article:published_time" content="2020-03-13T22:55:26+08:00"><meta property="article:modified_time" content="2020-03-13T22:55:26+08:00"><meta itemprop=name content="fflush 和 fsync的区别"><meta itemprop=description content="背景 指导新人在Apache Http Server(httpd) + Axis2/C 搭建的系统中新增调试日志，原计划是利用系统中打印日志的方式打印，但是修改程序后编译失败且评估发现此方案会耗"><meta itemprop=datePublished content="2020-03-13T22:55:26+08:00"><meta itemprop=dateModified content="2020-03-13T22:55:26+08:00"><meta itemprop=wordCount content="2341"><meta itemprop=keywords content="Development,C,"><meta name=twitter:card content="summary"><meta name=twitter:title content="fflush 和 fsync的区别"><meta name=twitter:description content="背景 指导新人在Apache Http Server(httpd) + Axis2/C 搭建的系统中新增调试日志，原计划是利用系统中打印日志的方式打印，但是修改程序后编译失败且评估发现此方案会耗"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>None的学习笔记</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>主页</li></a><a href=/post/><li class=mobile-menu-item>归档</li></a><a href=/tags/><li class=mobile-menu-item>标签</li></a><a href=/categories/><li class=mobile-menu-item>分类</li></a><a href=/series/><li class=mobile-menu-item>系列</li></a><a href=/about/><li class=mobile-menu-item>关于</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>None的学习笔记</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>主页</a></li><li class=menu-item><a class=menu-item-link href=/post/>归档</a></li><li class=menu-item><a class=menu-item-link href=/tags/>标签</a></li><li class=menu-item><a class=menu-item-link href=/categories/>分类</a></li><li class=menu-item><a class=menu-item-link href=/series/>系列</a></li><li class=menu-item><a class=menu-item-link href=/about/>关于</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>fflush 和 fsync的区别</h1><div class=post-meta><span class=post-time>2020-03-13</span><div class=post-category><a href=/categories/development/>Development</a>
+<a href=/categories/c/>C</a></div><span id=busuanzi_container_page_pv class=more-meta><span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> times read</span></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><a href=#背景>背景</a><ul><li><a href=#第一次踩坑>第一次踩坑</a></li><li><a href=#第二次踩坑>第二次踩坑</a></li></ul></li><li><a href=#解决方案>解决方案</a></li><li><a href=#反思>反思</a></li><li><a href=#总结>总结</a></li><li><a href=#附录>附录</a></li></ul></nav></div></div><div class=post-content><h2 id=背景>背景</h2><p>指导新人在Apache Http Server(httpd) + Axis2/C 搭建的系统中新增调试日志，原计划是利用系统中打印日志的方式打印，但是修改程序后编译失败且评估发现此方案会耗时很多，于是通过创建临时日志文件实现输出来快速满足需求，结果"踩坑&rdquo;。代码通过精简后如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=cp>#</span><span class=cp>include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span><span class=cp></span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=n>FILE</span> <span class=o>*</span><span class=n>fp</span> <span class=o>=</span> <span class=n>fopen</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>./interface.log</span><span class=s>&#34;</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>a+</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=k>if</span> <span class=p>(</span><span class=n>fp</span> <span class=o>=</span><span class=o>=</span> <span class=nb>NULL</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>perror</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>open file: interface.log failed </span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+    <span class=n>abort</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=n>fprintf</span><span class=p>(</span><span class=n>fp</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>[DEBUG] Interface: GenerateIndex</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=n>fclose</span><span class=p>(</span><span class=n>fp</span><span class=p>)</span><span class=p>;</span>
+
+</code></pre></td></tr></table></div></div><h3 id=第一次踩坑>第一次踩坑</h3><p>添加上述代码后测试，发现interface.log文件没有创建且程序通讯异常，http请求没有响应。于是怀疑创建日志文件没权限导致调用了<code>abort()</code>，执行<code>dmesg</code> 查看日志未发现异常，最后在Apache的error.log中发现如下的日志后确认是文件创建失败。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[core:notice] [pid 7203] AH00052: child pid 19370 exit signal Aborted (6)
+</code></pre></td></tr></table></div></div><p>通过在特定目录下创建文件解决权限问题，但是日志文件仍然为空。当时想到文件一般是<strong>全缓冲模式，只有填满标准I/O的缓冲区后才进行实际的I/O操作(对于驻留在磁盘的的文件通常是由I/O库实施全缓冲)</strong>。</p><h3 id=第二次踩坑>第二次踩坑</h3><p>于是计划在<code>fprintf(fp, ...)</code>后边新增<code>fflush(fp)</code>，为了确认<code>fflush</code>的作用，使用<code>man</code>查询如下:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>NAME
+       fflush - flush a stream
+
+SYNOPSIS
+       #include &lt;stdio.h&gt;
+
+       int fflush(FILE *stream);
+
+DESCRIPTION
+       For  output  streams,  fflush()  forces  a write of all user-space
+       buffered data for the  given  output  or  update  stream  via  the
+       stream&#39;s underlying write function.
+
+       For  input  streams  associated  with  seekable  files (e.g., disk
+       files, but not pipes or terminals), fflush() discards any buffered
+       data  that  has been fetched from the underlying file, but has not
+       been consumed by the application.
+
+NOTES
+       Note that fflush() flushes only the user-space buffers provided by
+       the C library.  To ensure that the data is  physically  stored  on
+       disk  the  kernel  buffers  must be flushed too, for example, with
+       sync(2) or fsync(2).
+</code></pre></td></tr></table></div></div><p>看到NOTES这节，发现<code>fflush()</code>只是将C库提供的用户空间的缓冲区刷新，要想将文件对应的内核缓冲区刷新请调用<code>fsync()</code>，最后是在<code>fprintf(fp, ...)</code>后边新增<code>fsync(fileno(fp))</code>，经过漫长的20分钟编译后测试，还是没有日志输出到interface.log。</p><h2 id=解决方案>解决方案</h2><p>最后使用<code>fflush() && fsync()</code>解决问题：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=kt>int</span> <span class=n>fd</span> <span class=o>=</span> <span class=n>fileno</span><span class=p>(</span><span class=n>fp</span><span class=p>)</span><span class=p>;</span>
+<span class=n>fprintf</span><span class=p>(</span><span class=n>fp</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>[DEBUG] Interface: GenerateIndex</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=c1>// 想测试Apache是不是会将stderr的信息重定向到原来的日志文件(答案是否定的)
+</span><span class=c1></span><span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>[DEBUG] Interface: GenerateIndex</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=n>fflush</span><span class=p>(</span><span class=n>fp</span><span class=p>)</span><span class=p>;</span>
+<span class=n>fsync</span><span class=p>(</span><span class=n>fileno</span><span class=p>(</span><span class=n>fp</span><span class=p>)</span><span class=p>)</span><span class=p>;</span>
+<span class=n>fclose</span><span class=p>(</span><span class=n>fp</span><span class=p>)</span><span class=p>;</span>
+</code></pre></td></tr></table></div></div><h2 id=反思>反思</h2><p>事后仔细阅读了<code>fsync()</code>的<code>man</code>手册，并查阅其它资料理解了这两个函数的区别和联系。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>NAME
+       fsync, fdatasync - synchronize a file&#39;s in-core state with storage device
+
+SYNOPSIS
+       #include &lt;unistd.h&gt;
+
+       int fsync(int fd);
+
+       int fdatasync(int fd);
+
+   Feature Test Macro Requirements for glibc (see feature_test_macros(7)):
+
+
+DESCRIPTION
+       # fsync 将文件相关的所有更改都刷新到disk device, 这个调用是阻塞的,
+       # 直到disk通知此函数传输完成。此函数也会将该文件的文件元信息(访问
+       # 时间或者修改时间等)刷新到磁盘。
+       fsync()  transfers (&#34;flushes&#34;) all modified in-core data of (i.e.,
+       modified buffer cache pages for) the file referred to by the  file
+       descriptor  fd  to the disk device (or other permanent storage de‐
+       vice) so that all changed information can be retrieved even if the
+       system  crashes  or is rebooted.  This includes writing through or
+       flushing a disk cache if present.  The call blocks until  the  de‐
+       vice reports that the transfer has completed.
+
+       As  well as flushing the file data, fsync() also flushes the meta‐
+       data information associated with the file (see inode(7)).
+
+       Calling fsync() does not necessarily ensure that the entry in  the
+       directory  containing the file has also reached disk.  For that an
+       explicit fsync() on a file descriptor for the  directory  is  also
+       needed.
+
+       fdatasync()  is  similar  to  fsync(), but does not flush modified
+       metadata unless that metadata is needed in order to allow a subse‐
+       quent  data  retrieval  to  be  correctly  handled.   For example,
+       changes to st_atime or st_mtime (respectively, time of last access
+       and time of last modification; see inode(7)) do not require flush‐
+       ing because they are not necessary for a subsequent data  read  to
+       be  handled  correctly.   On  the other hand, a change to the file
+       size (st_size, as made by say ftruncate(2)), would require a meta‐
+       data flush.
+
+       The aim of fdatasync() is to reduce disk activity for applications
+       that do not require all metadata to be synchronized with the disk.
+</code></pre></td></tr></table></div></div><p>通过上述信息我们可以看出,fsync()需要两次磁盘操作，使用fdatasync()可能减少一次磁盘操作。例如文件数据已经修改，但是文件大小没有变化，则调用fdatasync()只要求更新文件数据。我们知道同步I/O数据完成不要求文件修改时间戳等元数据输出至磁盘。相反，调用fsync()则要求元数据也被传输至磁盘。
+对于性能要求很高，或者不需要精确维护某些元数据(如时间戳)的应用来说，按上面的方式减少磁盘I/O操作的数量是很有用的。对于更新许多文件的应用来说，这样做可以获得很大的性能提升，因为<strong>文件数据和元数据通常存储在磁盘的不同区域，同时更新二者要求执行2次磁盘定位操作</strong>。</p><h2 id=总结>总结</h2><p><code>fflush() & fsync()</code>区别和联系如下图所示，当时以为直接使用<code>fsync()</code>即可保证将日志信息写入到磁盘文件，但是若文件对应的内核缓冲区中没数据(有可能是数据还没有从C库的缓冲区刷新到内核的文件缓冲区)，则依旧没有内容输出到文件。
+<img src=/img/fflush_fsync.png alt=fflush_fsync></p><p>在经过自己思考过后查阅了蕨菜书的Chapter 13 : File I/O Buffering，发现了其中的一幅图详细的介绍了说明了此问题:
+<img src=/img/file_io_buffering.png alt="File I/O Buffering">
+图中综合了stdio库和内核(对于输出文件)采用的缓冲，以及控制缓冲类型的机制。图中间从上到下，我们可以看到stdio库函数把用户数据传输到stdio缓冲区(这些都在用户内存空间中维护)。当这个缓冲区满时，stdio库调用write()系统调用，把数据传输给内核缓冲区缓存(在内核内存中维护)。最后内核发起磁盘操作，将数据传输至磁盘。
+图的左侧显示了任意时候对缓冲区进行显式强制刷新的调用。右侧则显示了用于自动(隐式)刷新的调用，通过禁止stdio缓冲、或使用同步文件输出系统调用，这样每个write()都立即刷新到磁盘。</p><p>后续为了避免此类问题，可以在<code>fprintf(fp, ...)</code>后添加下边两行：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=n>fflush</span><span class=p>(</span><span class=n>fp</span><span class=p>)</span><span class=p>;</span>
+<span class=n>fsync</span><span class=p>(</span><span class=n>fileno</span><span class=p>(</span><span class=n>fp</span><span class=p>)</span><span class=p>)</span><span class=p>;</span>
+</code></pre></td></tr></table></div></div><h2 id=附录>附录</h2><p>标准I/O提供了三种类型的缓冲：</p><ul><li>全缓冲。这种情况下，在填满标准I/O缓冲区后才进行实际的I/O操作。对于驻留在磁盘的文件通常由标准I/O库实施全缓冲。</li><li>行缓冲。在这种情况下，当在输入和输出中遇到换行符时，标准I/O库执行I/O操作。当涉及到一个终端时(例如标准输入和标准输入)，通常使用行缓冲。对于行缓冲有个限制，标准库I/O库用来收集每一行的缓冲区的长度是固定的，所以只要填满缓冲区，那么即使还没写入一个换行符，也进行I/O操作。</li><li>不带缓冲。标准I/O库不对字符进行缓存存储。其中stderr通常是不带缓存的，这样使得错误信息尽可能快的显示。</li></ul></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>None</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2020-03-13</span></p><p class=copyright-item><span class=item-title>License</span>
+<span class=item-content><a rel="license noopener" href=#https://creativecommons.org/licenses/by-nc-nd/4.0/ target=_blank>CC BY-NC-ND 4.0</a></span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/development/>Development</a>
+<a href=/tags/c/>C</a></div><nav class=post-nav><a class=next href=/post/async-signal-safe-function/><span class="next-text nav-default">异步信号安全函数</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:your@email.com class="iconfont icon-email" title=email></a><a href=http://localhost:1313/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span><div class=busuanzi-footer><span id=busuanzi_container_site_pv>site pv: <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span></span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv>site uv: <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span></span></div><span class=copyright-year>&copy;
+2020
+<span class=heart><i class="iconfont icon-heart"></i></span><span class=author>None</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/dist/even.26188efa.min.js></script></body></html>
