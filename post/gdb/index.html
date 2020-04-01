@@ -1,0 +1,1508 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>GDB常用命令 - Even - A super concise theme for Hugo</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="None"><meta name=description content="背景 以下内容是基于自己在公司培训的材料上补充而来。 信息显示 显示gdb版本信息 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 $ gdb GNU gdb (GDB) 8.3 Copyright (C) 2019 Free Software Foundation, Inc. License GPLv3+: GNU"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.62.2 with theme even"><link rel=canonical href=http://localhost:1313/post/gdb/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><link href=/dist/even.c2a46f00.min.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="GDB常用命令"><meta property="og:description" content="背景 以下内容是基于自己在公司培训的材料上补充而来。 信息显示 显示gdb版本信息 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 $ gdb GNU gdb (GDB) 8.3 Copyright (C) 2019 Free Software Foundation, Inc. License GPLv3+: GNU"><meta property="og:type" content="article"><meta property="og:url" content="http://localhost:1313/post/gdb/"><meta property="article:published_time" content="2020-03-26T21:30:00+08:00"><meta property="article:modified_time" content="2020-03-26T21:30:00+08:00"><meta itemprop=name content="GDB常用命令"><meta itemprop=description content="背景 以下内容是基于自己在公司培训的材料上补充而来。 信息显示 显示gdb版本信息 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 $ gdb GNU gdb (GDB) 8.3 Copyright (C) 2019 Free Software Foundation, Inc. License GPLv3+: GNU"><meta itemprop=datePublished content="2020-03-26T21:30:00+08:00"><meta itemprop=dateModified content="2020-03-26T21:30:00+08:00"><meta itemprop=wordCount content="5287"><meta itemprop=keywords content="Development,GDB,"><meta name=twitter:card content="summary"><meta name=twitter:title content="GDB常用命令"><meta name=twitter:description content="背景 以下内容是基于自己在公司培训的材料上补充而来。 信息显示 显示gdb版本信息 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 $ gdb GNU gdb (GDB) 8.3 Copyright (C) 2019 Free Software Foundation, Inc. License GPLv3+: GNU"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>None的学习笔记</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>主页</li></a><a href=/post/><li class=mobile-menu-item>归档</li></a><a href=/tags/><li class=mobile-menu-item>标签</li></a><a href=/categories/><li class=mobile-menu-item>分类</li></a><a href=/series/><li class=mobile-menu-item>系列</li></a><a href=/about/><li class=mobile-menu-item>关于</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>None的学习笔记</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>主页</a></li><li class=menu-item><a class=menu-item-link href=/post/>归档</a></li><li class=menu-item><a class=menu-item-link href=/tags/>标签</a></li><li class=menu-item><a class=menu-item-link href=/categories/>分类</a></li><li class=menu-item><a class=menu-item-link href=/series/>系列</a></li><li class=menu-item><a class=menu-item-link href=/about/>关于</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>GDB常用命令</h1><div class=post-meta><span class=post-time>2020-03-26</span><div class=post-category><a href=/categories/development/>Development</a>
+<a href=/categories/gdb/>GDB</a></div><span id=busuanzi_container_page_pv class=more-meta><span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读</span></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>文章目录</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><a href=#背景>背景</a></li><li><a href=#信息显示>信息显示</a><ul><li><a href=#显示gdb版本信息>显示gdb版本信息</a></li><li><a href=#启动时不显示提示信息>启动时不显示提示信息</a></li><li><a href=#退出时不显示提示信息>退出时不显示提示信息</a></li><li><a href=#gdbinit配置文件>gdbinit配置文件</a></li></ul></li><li><a href=#断点>断点</a><ul><li><a href=#保存已经设置的断点>保存已经设置的断点</a></li><li><a href=#设置条件断点>设置条件断点</a></li></ul></li><li><a href=#函数>函数</a><ul><li><a href=#列出函数的名字>列出函数的名字</a></li><li><a href=#退出正在调试的函数>退出正在调试的函数</a></li><li><a href=#查看函数堆栈信息>查看函数堆栈信息</a></li></ul></li><li><a href=#观察点>观察点</a><ul><li><a href=#设置观察点>设置观察点</a></li><li><a href=#设置读写观察点>设置读写观察点</a></li></ul></li><li><a href=#多进程多线程>多进程/多线程</a><ul><li><a href=#调试子进程>调试子进程</a></li><li><a href=#同时调试子进程和父进程>同时调试子进程和父进程</a></li><li><a href=#查看线程信息>查看线程信息</a></li><li><a href=#只允许一个线程运行>只允许一个线程运行</a></li></ul></li><li><a href=#todo>TODO</a><ul><li><a href=#thread-apply-all>thread apply all</a></li><li><a href=#汇编>汇编</a></li></ul></li><li><a href=#参考资料>参考资料</a></li></ul></nav></div></div><div class=post-content><h2 id=背景>背景</h2><p>以下内容是基于自己在公司培训的材料上补充而来。</p><h2 id=信息显示>信息显示</h2><h3 id=显示gdb版本信息>显示gdb版本信息</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=err>$</span> <span class=n>gdb</span>
+<span class=n>GNU</span> <span class=n>gdb</span> <span class=p>(</span><span class=n>GDB</span><span class=p>)</span> <span class=mf>8.3</span>
+<span class=n>Copyright</span> <span class=p>(</span><span class=n>C</span><span class=p>)</span> <span class=mi>2019</span> <span class=n>Free</span> <span class=n>Software</span> <span class=n>Foundation</span><span class=p>,</span> <span class=n>Inc</span><span class=o>.</span>
+<span class=n>License</span> <span class=n>GPLv3</span><span class=o>+</span><span class=p>:</span> <span class=n>GNU</span> <span class=n>GPL</span> <span class=n>version</span> <span class=mi>3</span> <span class=ow>or</span> <span class=n>later</span> <span class=o>&lt;</span><span class=n>http</span><span class=p>:</span><span class=o>/</span><span class=o>/</span><span class=n>gnu</span><span class=o>.</span><span class=n>org</span><span class=o>/</span><span class=n>licenses</span><span class=o>/</span><span class=n>gpl</span><span class=o>.</span><span class=n>html</span><span class=o>&gt;</span>
+<span class=n>This</span> <span class=ow>is</span> <span class=n>free</span> <span class=n>software</span><span class=p>:</span> <span class=n>you</span> <span class=n>are</span> <span class=n>free</span> <span class=n>to</span> <span class=n>change</span> <span class=ow>and</span> <span class=n>redistribute</span> <span class=n>it</span><span class=o>.</span>
+<span class=n>There</span> <span class=ow>is</span> <span class=n>NO</span> <span class=n>WARRANTY</span><span class=p>,</span> <span class=n>to</span> <span class=n>the</span> <span class=n>extent</span> <span class=n>permitted</span> <span class=n>by</span> <span class=n>law</span><span class=o>.</span>
+<span class=n>Type</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>show copying</span><span class=s2>&#34;</span> <span class=ow>and</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>show warranty</span><span class=s2>&#34;</span> <span class=k>for</span> <span class=n>details</span><span class=o>.</span>
+<span class=n>This</span> <span class=n>GDB</span> <span class=n>was</span> <span class=n>configured</span> <span class=k>as</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>x86_64-apple-darwin16.7.0</span><span class=s2>&#34;</span><span class=o>.</span>
+<span class=n>Type</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>show configuration</span><span class=s2>&#34;</span> <span class=k>for</span> <span class=n>configuration</span> <span class=n>details</span><span class=o>.</span>
+<span class=n>For</span> <span class=n>bug</span> <span class=n>reporting</span> <span class=n>instructions</span><span class=p>,</span> <span class=n>please</span> <span class=n>see</span><span class=p>:</span>
+<span class=o>&lt;</span><span class=n>http</span><span class=p>:</span><span class=o>/</span><span class=o>/</span><span class=n>www</span><span class=o>.</span><span class=n>gnu</span><span class=o>.</span><span class=n>org</span><span class=o>/</span><span class=n>software</span><span class=o>/</span><span class=n>gdb</span><span class=o>/</span><span class=n>bugs</span><span class=o>/</span><span class=o>&gt;</span><span class=o>.</span>
+<span class=n>Find</span> <span class=n>the</span> <span class=n>GDB</span> <span class=n>manual</span> <span class=ow>and</span> <span class=n>other</span> <span class=n>documentation</span> <span class=n>resources</span> <span class=n>online</span> <span class=n>at</span><span class=p>:</span>
+    <span class=o>&lt;</span><span class=n>http</span><span class=p>:</span><span class=o>/</span><span class=o>/</span><span class=n>www</span><span class=o>.</span><span class=n>gnu</span><span class=o>.</span><span class=n>org</span><span class=o>/</span><span class=n>software</span><span class=o>/</span><span class=n>gdb</span><span class=o>/</span><span class=n>documentation</span><span class=o>/</span><span class=o>&gt;</span><span class=o>.</span>
+
+<span class=n>For</span> <span class=n>help</span><span class=p>,</span> <span class=nb>type</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>help</span><span class=s2>&#34;</span><span class=o>.</span>
+<span class=n>Type</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>apropos word</span><span class=s2>&#34;</span> <span class=n>to</span> <span class=n>search</span> <span class=k>for</span> <span class=n>commands</span> <span class=n>related</span> <span class=n>to</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>word</span><span class=s2>&#34;</span><span class=o>.</span>
+</code></pre></td></tr></table></div></div><h3 id=启动时不显示提示信息>启动时不显示提示信息</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>show</span> <span class=n>version</span>
+<span class=n>GNU</span> <span class=n>gdb</span> <span class=p>(</span><span class=n>GDB</span><span class=p>)</span> <span class=mf>8.3</span>
+<span class=n>Copyright</span> <span class=p>(</span><span class=n>C</span><span class=p>)</span> <span class=mi>2019</span> <span class=n>Free</span> <span class=n>Software</span> <span class=n>Foundation</span><span class=p>,</span> <span class=n>Inc</span><span class=o>.</span>
+<span class=n>License</span> <span class=n>GPLv3</span><span class=o>+</span><span class=p>:</span> <span class=n>GNU</span> <span class=n>GPL</span> <span class=n>version</span> <span class=mi>3</span> <span class=ow>or</span> <span class=n>later</span> <span class=o>&lt;</span><span class=n>http</span><span class=p>:</span><span class=o>/</span><span class=o>/</span><span class=n>gnu</span><span class=o>.</span><span class=n>org</span><span class=o>/</span><span class=n>licenses</span><span class=o>/</span><span class=n>gpl</span><span class=o>.</span><span class=n>html</span><span class=o>&gt;</span>
+<span class=n>This</span> <span class=ow>is</span> <span class=n>free</span> <span class=n>software</span><span class=p>:</span> <span class=n>you</span> <span class=n>are</span> <span class=n>free</span> <span class=n>to</span> <span class=n>change</span> <span class=ow>and</span> <span class=n>redistribute</span> <span class=n>it</span><span class=o>.</span>
+<span class=n>There</span> <span class=ow>is</span> <span class=n>NO</span> <span class=n>WARRANTY</span><span class=p>,</span> <span class=n>to</span> <span class=n>the</span> <span class=n>extent</span> <span class=n>permitted</span> <span class=n>by</span> <span class=n>law</span><span class=o>.</span>
+<span class=n>Type</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>show copying</span><span class=s2>&#34;</span> <span class=ow>and</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>show warranty</span><span class=s2>&#34;</span> <span class=k>for</span> <span class=n>details</span><span class=o>.</span>
+<span class=n>This</span> <span class=n>GDB</span> <span class=n>was</span> <span class=n>configured</span> <span class=k>as</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>x86_64-apple-darwin16.7.0</span><span class=s2>&#34;</span><span class=o>.</span>
+<span class=n>Type</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>show configuration</span><span class=s2>&#34;</span> <span class=k>for</span> <span class=n>configuration</span> <span class=n>details</span><span class=o>.</span>
+<span class=n>For</span> <span class=n>bug</span> <span class=n>reporting</span> <span class=n>instructions</span><span class=p>,</span> <span class=n>please</span> <span class=n>see</span><span class=p>:</span>
+<span class=o>&lt;</span><span class=n>http</span><span class=p>:</span><span class=o>/</span><span class=o>/</span><span class=n>www</span><span class=o>.</span><span class=n>gnu</span><span class=o>.</span><span class=n>org</span><span class=o>/</span><span class=n>software</span><span class=o>/</span><span class=n>gdb</span><span class=o>/</span><span class=n>bugs</span><span class=o>/</span><span class=o>&gt;</span><span class=o>.</span>
+<span class=n>Find</span> <span class=n>the</span> <span class=n>GDB</span> <span class=n>manual</span> <span class=ow>and</span> <span class=n>other</span> <span class=n>documentation</span> <span class=n>resources</span> <span class=n>online</span> <span class=n>at</span><span class=p>:</span>
+    <span class=o>&lt;</span><span class=n>http</span><span class=p>:</span><span class=o>/</span><span class=o>/</span><span class=n>www</span><span class=o>.</span><span class=n>gnu</span><span class=o>.</span><span class=n>org</span><span class=o>/</span><span class=n>software</span><span class=o>/</span><span class=n>gdb</span><span class=o>/</span><span class=n>documentation</span><span class=o>/</span><span class=o>&gt;</span><span class=o>.</span>
+
+<span class=n>For</span> <span class=n>help</span><span class=p>,</span> <span class=nb>type</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>help</span><span class=s2>&#34;</span><span class=o>.</span>
+<span class=n>Type</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>apropos word</span><span class=s2>&#34;</span> <span class=n>to</span> <span class=n>search</span> <span class=k>for</span> <span class=n>commands</span> <span class=n>related</span> <span class=n>to</span> <span class=sa></span><span class=s2>&#34;</span><span class=s2>word</span><span class=s2>&#34;</span><span class=o>.</span>
+</code></pre></td></tr></table></div></div><h3 id=退出时不显示提示信息>退出时不显示提示信息</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>quit</span>
+<span class=n>A</span> <span class=n>debugging</span> <span class=n>session</span> <span class=ow>is</span> <span class=n>active</span><span class=o>.</span>
+
+	<span class=n>Inferior</span> <span class=mi>1</span> <span class=p>[</span><span class=n>process</span> <span class=mi>19119</span><span class=p>]</span> <span class=n>will</span> <span class=n>be</span> <span class=n>killed</span><span class=o>.</span>
+
+<span class=n>Quit</span> <span class=n>anyway</span><span class=err>?</span> <span class=p>(</span><span class=n>y</span> <span class=ow>or</span> <span class=n>n</span><span class=p>)</span>
+</code></pre></td></tr></table></div></div><p>如果不想显示这个信息，则可以在gdb中使用如下命令把提示信息关掉:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=nb>set</span> <span class=n>confirm</span> <span class=n>off</span>
+</code></pre></td></tr></table></div></div><blockquote><p>建议把这个命令加到.gdbinit文件中。</p></blockquote><h3 id=gdbinit配置文件>gdbinit配置文件</h3><p>当<strong>gdb</strong>启动时，它在当前用户的<code>HOME</code>目录下寻找<code>.gdbinit</code>文件；如果该文件存在，则<strong>gdb</strong>就执行该文件中的所有命令。通常，该文件用于简单的配置命令，如设置所需的缺省汇编程序格式(Intel® 或 Motorola)或用于显示输入和输出数据的缺省基数(十进制或十六进制)。它还可以读取宏编码语言，从而允许实现更强大的自定义。该语言遵循如下基本格式：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=n>define</span> <span class=o>&lt;</span><span class=n>command</span><span class=o>&gt;</span>
+    <span class=o>&lt;</span><span class=n>code</span><span class=o>&gt;</span>
+<span class=n>end</span>
+<span class=n>document</span> <span class=o>&lt;</span><span class=n>command</span><span class=o>&gt;</span>
+<span class=o>&lt;</span><span class=n>help</span> <span class=n>text</span><span class=o>&gt;</span>
+<span class=n>end</span>
+
+
+<span class=c1># breakpoint aliases</span>
+<span class=n>define</span> <span class=n>bpl</span>
+    <span class=n>info</span> <span class=n>breakpoints</span>
+<span class=n>end</span>
+<span class=n>document</span> <span class=n>bpl</span>
+<span class=n>Syntax</span><span class=p>:</span> <span class=n>bpl</span>
+<span class=o>|</span> <span class=n>List</span> <span class=nb>all</span> <span class=n>breakpoints</span><span class=o>.</span>
+<span class=n>end</span>
+</code></pre></td></tr></table></div></div><p>这里是一些常用的设置，可以放到<code>.gdbinit</code>的一些配置：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=c1># 保存历史命令(gdb默认不保存历史命令)</span>
+<span class=nb>set</span> <span class=n>history</span> <span class=n>filename</span> <span class=o>~</span><span class=o>/</span><span class=o>.</span><span class=n>gdb_history</span>
+<span class=nb>set</span> <span class=n>history</span> <span class=n>save</span> <span class=n>on</span>
+<span class=c1># 退出时不显示提示信息</span>
+<span class=nb>set</span> <span class=n>confirm</span> <span class=n>off</span>
+<span class=c1># 按照派生类型打印对象</span>
+<span class=nb>set</span> <span class=k>print</span> <span class=nb>object</span> <span class=n>on</span>
+<span class=c1># 打印数组的索引下标</span>
+<span class=nb>set</span> <span class=k>print</span> <span class=n>array</span><span class=o>-</span><span class=n>indexes</span> <span class=n>on</span>
+<span class=c1># 每行打印一个结构体成员</span>
+<span class=nb>set</span> <span class=k>print</span> <span class=n>pretty</span> <span class=n>on</span>
+</code></pre></td></tr></table></div></div><h2 id=断点>断点</h2><h3 id=保存已经设置的断点>保存已经设置的断点</h3><p>在<strong>gdb</strong>中可以使用<code>set breakpoints file_name_to_save</code>将已经设置的断点保存下来，下次调试时可以使用<code>source file_name_to_safe</code>加载保存的断点。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>float_range</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>float_range</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>set</span> <span class=n>listsize</span> <span class=mi>0</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=kt>float</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>3</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>math</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>4</span>
+<span class=mi>5</span>	<span class=kt>int</span> <span class=n>main</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>6</span>	    <span class=nf>printf</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>FLT_RADIX    = %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>FLT_RADIX</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>7</span>	    <span class=nf>printf</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>FLT_MIN      = %e</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>FLT_MIN</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>8</span>	    <span class=nf>printf</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>FLT_MIN      = %f</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>FLT_MIN</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>9</span>	    <span class=nf>printf</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>FLT_MAX      = %e</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>FLT_MAX</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>10</span>	    <span class=nf>printf</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>FLT_MAX      = %f</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>FLT_MAX</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>11</span>		<span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>12</span>	<span class=p>}</span>
+
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>b</span> <span class=n>float_range</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>6</span>
+<span class=n>Breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x100000d33</span><span class=o>:</span> <span class=n>file</span> <span class=n>float_range</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>6.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>b</span> <span class=n>float_range</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>8</span>
+<span class=n>Breakpoint</span> <span class=mi>2</span> <span class=n>at</span> <span class=mh>0x100000d69</span><span class=o>:</span> <span class=n>file</span> <span class=n>float_range</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>8.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>b</span> <span class=n>float_range</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>10</span>
+<span class=n>Breakpoint</span> <span class=mi>3</span> <span class=n>at</span> <span class=mh>0x100000da9</span><span class=o>:</span> <span class=n>file</span> <span class=n>float_range</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>10.</span>
+
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>breakpoints</span>
+<span class=n>Num</span>     <span class=n>Type</span>           <span class=n>Disp</span> <span class=n>Enb</span> <span class=n>Address</span>            <span class=n>What</span>
+<span class=mi>1</span>       <span class=n>breakpoint</span>     <span class=n>keep</span> <span class=n>y</span>   <span class=mh>0x0000000100000d33</span> <span class=n>in</span> <span class=n>main</span> <span class=n>at</span> <span class=n>float_range</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>6</span>
+<span class=mi>2</span>       <span class=n>breakpoint</span>     <span class=n>keep</span> <span class=n>y</span>   <span class=mh>0x0000000100000d69</span> <span class=n>in</span> <span class=n>main</span> <span class=n>at</span> <span class=n>float_range</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>8</span>
+<span class=mi>3</span>       <span class=n>breakpoint</span>     <span class=n>keep</span> <span class=n>y</span>   <span class=mh>0x0000000100000da9</span> <span class=n>in</span> <span class=n>main</span> <span class=n>at</span> <span class=n>float_range</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>10</span>
+
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>save</span> <span class=n>breakpoints</span> <span class=n>float_range_bp</span>
+<span class=n>Saved</span> <span class=n>to</span> <span class=n>file</span> <span class=err>&#39;</span><span class=n>float_range_bp</span><span class=err>&#39;</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>quit</span>
+
+
+<span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>float_range</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>float_range</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>source</span> <span class=n>float_range_bp</span>
+<span class=n>Breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x100000d33</span><span class=o>:</span> <span class=n>file</span> <span class=n>float_range</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>6.</span>
+<span class=n>Breakpoint</span> <span class=mi>2</span> <span class=n>at</span> <span class=mh>0x100000d69</span><span class=o>:</span> <span class=n>file</span> <span class=n>float_range</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>8.</span>
+<span class=n>Breakpoint</span> <span class=mi>3</span> <span class=n>at</span> <span class=mh>0x100000da9</span><span class=o>:</span> <span class=n>file</span> <span class=n>float_range</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>10.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>breakpoints</span>
+<span class=n>Num</span>     <span class=n>Type</span>           <span class=n>Disp</span> <span class=n>Enb</span> <span class=n>Address</span>            <span class=n>What</span>
+<span class=mi>1</span>       <span class=n>breakpoint</span>     <span class=n>keep</span> <span class=n>y</span>   <span class=mh>0x0000000100000d33</span> <span class=n>in</span> <span class=n>main</span> <span class=n>at</span> <span class=n>float_range</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>6</span>
+<span class=mi>2</span>       <span class=n>breakpoint</span>     <span class=n>keep</span> <span class=n>y</span>   <span class=mh>0x0000000100000d69</span> <span class=n>in</span> <span class=n>main</span> <span class=n>at</span> <span class=n>float_range</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>8</span>
+<span class=mi>3</span>       <span class=n>breakpoint</span>     <span class=n>keep</span> <span class=n>y</span>   <span class=mh>0x0000000100000da9</span> <span class=n>in</span> <span class=n>main</span> <span class=n>at</span> <span class=n>float_range</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>10</span>
+</code></pre></td></tr></table></div></div><h3 id=设置条件断点>设置条件断点</h3><p>我们可以在<code>gdb</code>中设置条件断点，也就是只有在满足条件时，断点才会被出发，命令格式<code>break ... if cond</code>。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>gdb_cond</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>gdb_cond</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>
+<span class=mi>3</span>	<span class=kt>int</span> <span class=n>main</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>4</span>	    <span class=kt>int</span> <span class=n>i</span>   <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>5</span>	    <span class=kt>int</span> <span class=n>sum</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>6</span>
+<span class=mi>7</span>	    <span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span><span class=o>=</span> <span class=mi>200</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>8</span>	        <span class=n>sum</span> <span class=o>+</span><span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+<span class=mi>9</span>	    <span class=p>}</span>
+<span class=mi>10</span>
+<span class=mi>11</span>	    <span class=nf>printf</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>sum = %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>sum</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>12</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>13</span>	<span class=p>}</span>
+
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>b</span> <span class=mi>8</span> <span class=k>if</span> <span class=n>i</span> <span class=o>=</span><span class=o>=</span> <span class=mi>100</span>
+<span class=n>Breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x100000f51</span><span class=o>:</span> <span class=n>file</span> <span class=n>gdb_cond</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>8.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>b</span> <span class=mi>8</span> <span class=k>if</span> <span class=n>i</span> <span class=o>=</span><span class=o>=</span> <span class=mi>182</span>
+<span class=nl>Note</span><span class=p>:</span> <span class=n>breakpoint</span> <span class=mi>1</span> <span class=n>also</span> <span class=n>set</span> <span class=n>at</span> <span class=n>pc</span> <span class=mh>0x100000f51</span><span class=p>.</span>
+<span class=n>Breakpoint</span> <span class=mi>2</span> <span class=n>at</span> <span class=mh>0x100000f51</span><span class=o>:</span> <span class=n>file</span> <span class=n>gdb_cond</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>8.</span>
+
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>r</span>
+<span class=n>Starting</span> <span class=nl>program</span><span class=p>:</span> <span class=o>/</span><span class=n>Users</span><span class=o>/</span><span class=n>wg</span><span class=o>/</span><span class=n>develop</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>gdb_cond</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1103</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>55419</span><span class=p>]</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1403</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>55419</span><span class=p>]</span>
+
+<span class=n>Thread</span> <span class=mi>2</span> <span class=n>hit</span> <span class=n>Breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_cond</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>8</span>
+<span class=mi>8</span>	        <span class=n>sum</span> <span class=o>+</span><span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>p</span> <span class=n>i</span>
+<span class=err>$</span><span class=mi>1</span> <span class=o>=</span> <span class=mi>100</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>c</span>
+<span class=n>Continuing</span><span class=p>.</span>
+
+<span class=n>Thread</span> <span class=mi>2</span> <span class=n>hit</span> <span class=n>Breakpoint</span> <span class=mi>2</span><span class=p>,</span> <span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_cond</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>8</span>
+<span class=mi>8</span>	        <span class=n>sum</span> <span class=o>+</span><span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>p</span> <span class=n>i</span>
+<span class=err>$</span><span class=mi>2</span> <span class=o>=</span> <span class=mi>182</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>q</span>
+</code></pre></td></tr></table></div></div><h2 id=函数>函数</h2><h3 id=列出函数的名字>列出函数的名字</h3><p><code>gdb</code>调试时，我们可以使用<code>info functions</code>命令列出可执行文件的所有函数名称。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>pthread_local_data</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>pthread_local_data</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>pthread</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>3</span>
+<span class=mi>4</span>	<span class=k>static</span> <span class=n>pthread_key_t</span> <span class=n>log_key</span><span class=p>;</span>
+<span class=mi>5</span>
+<span class=mi>6</span>	<span class=kt>void</span> <span class=nf>write_to_thread_log</span><span class=p>(</span><span class=k>const</span> <span class=kt>char</span><span class=o>*</span> <span class=n>message</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>7</span>	    <span class=n>FILE</span> <span class=o>*</span> <span class=n>log_file</span> <span class=o>=</span> <span class=p>(</span><span class=n>FILE</span><span class=o>*</span><span class=p>)</span><span class=n>pthread_getspecific</span><span class=p>(</span><span class=n>log_key</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>8</span>	    <span class=n>fprintf</span><span class=p>(</span><span class=n>log_file</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>%s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>message</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>9</span>	<span class=p>}</span>
+<span class=mi>10</span>
+<span class=mi>11</span>	<span class=kt>void</span> <span class=nf>close_thread_log</span><span class=p>(</span><span class=kt>void</span><span class=o>*</span> <span class=n>thread_log</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>12</span>	    <span class=n>fclose</span><span class=p>(</span><span class=p>(</span><span class=n>FILE</span><span class=o>*</span><span class=p>)</span><span class=n>thread_log</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>13</span>	<span class=p>}</span>
+<span class=mi>14</span>
+<span class=mi>15</span>	<span class=kt>void</span> <span class=o>*</span><span class=nf>thread_func</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>arg</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>16</span>	    <span class=kt>char</span> <span class=n>thread_log_filename</span><span class=p>[</span><span class=mi>64</span><span class=p>]</span><span class=p>;</span>
+<span class=mi>17</span>	    <span class=n>FILE</span> <span class=o>*</span><span class=n>thread_log</span><span class=p>;</span>
+<span class=mi>18</span>	    <span class=n>snprintf</span><span class=p>(</span><span class=n>thread_log_filename</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>thread_log_filename</span><span class=p>)</span><span class=p>,</span>
+<span class=mi>19</span>	             <span class=sa></span><span class=s>&#34;</span><span class=s>thread%d.log</span><span class=s>&#34;</span><span class=p>,</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=n>pthread_self</span><span class=p>(</span><span class=p>)</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>20</span>	    <span class=n>thread_log</span> <span class=o>=</span> <span class=n>fopen</span><span class=p>(</span><span class=n>thread_log_filename</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>w</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>21</span>	    <span class=n>pthread_setspecific</span><span class=p>(</span><span class=n>log_key</span><span class=p>,</span> <span class=n>thread_log</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>22</span>	    <span class=n>write_to_thread_log</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>Thread starting.</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>23</span>
+<span class=mi>24</span>	    <span class=k>return</span> <span class=nb>NULL</span><span class=p>;</span>
+<span class=mi>25</span>	<span class=p>}</span>
+<span class=mi>26</span>
+<span class=mi>27</span>	<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>28</span>	    <span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>29</span>	    <span class=k>const</span> <span class=kt>int</span> <span class=n>thread_num</span> <span class=o>=</span> <span class=mi>8</span><span class=p>;</span>
+<span class=mi>30</span>	    <span class=n>pthread_t</span> <span class=n>tids</span><span class=p>[</span><span class=n>thread_num</span><span class=p>]</span><span class=p>;</span>
+<span class=mi>31</span>	    <span class=n>pthread_key_create</span><span class=p>(</span><span class=o>&amp;</span><span class=n>log_key</span><span class=p>,</span> <span class=n>close_thread_log</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>32</span>	    <span class=k>for</span> <span class=p>(</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>thread_num</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>33</span>	        <span class=n>pthread_create</span><span class=p>(</span><span class=o>&amp;</span><span class=n>tids</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=n>thread_func</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>34</span>	    <span class=p>}</span>
+<span class=mi>35</span>
+<span class=mi>36</span>	    <span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>thread_num</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>37</span>	        <span class=n>pthread_join</span><span class=p>(</span><span class=n>tids</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>38</span>	    <span class=p>}</span>
+<span class=mi>39</span>
+<span class=mi>40</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>41</span>	<span class=p>}</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>functions</span>
+<span class=n>All</span> <span class=n>defined</span> <span class=nl>functions</span><span class=p>:</span>
+
+<span class=n>File</span> <span class=n>pthread_local_data</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span>
+<span class=mi>11</span><span class=o>:</span>	<span class=kt>void</span> <span class=n>close_thread_log</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>27</span><span class=o>:</span>	<span class=kt>int</span> <span class=n>main</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>15</span><span class=o>:</span>	<span class=kt>void</span> <span class=o>*</span><span class=n>thread_func</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>6</span><span class=o>:</span>	<span class=kt>void</span> <span class=n>write_to_thread_log</span><span class=p>(</span><span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=p>)</span><span class=p>;</span>
+
+<span class=n>Non</span><span class=o>-</span><span class=n>debugging</span> <span class=nl>symbols</span><span class=p>:</span>
+<span class=mh>0x0000000100000000</span>  <span class=n>_mh_execute_header</span>
+</code></pre></td></tr></table></div></div><h3 id=退出正在调试的函数>退出正在调试的函数</h3><p>当我们单步调试一个函数时，如果不想继续跟踪下去，可以使用<code>finish</code>命令，这样函数会继续执行完，并且打印返回值，然后等待接下来的命令。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>gdb_finish</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>gdb_finish</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdlib</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>3</span>
+<span class=mi>4</span>	<span class=kt>int</span> <span class=n>magic</span><span class=p>(</span><span class=kt>int</span> <span class=n>x</span><span class=p>,</span> <span class=kt>int</span> <span class=n>y</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>5</span>	    <span class=kt>int</span> <span class=n>seed</span> <span class=o>=</span> <span class=mi>127</span><span class=p>;</span>
+<span class=mi>6</span>	    <span class=kt>int</span> <span class=n>sum</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>7</span>	    <span class=n>sum</span> <span class=o>=</span> <span class=p>(</span><span class=n>x</span> <span class=o>*</span> <span class=n>y</span><span class=p>)</span> <span class=o>+</span> <span class=p>(</span><span class=n>x</span> <span class=o>*</span> <span class=n>y</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>8</span>	    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>128</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>9</span>	        <span class=n>sum</span> <span class=o>+</span><span class=o>=</span> <span class=n>sum</span> <span class=o>&amp;</span> <span class=n>seed</span> <span class=o>+</span> <span class=p>(</span><span class=n>x</span> <span class=o>&amp;</span> <span class=n>i</span><span class=p>)</span> <span class=o>+</span> <span class=p>(</span><span class=n>y</span> <span class=o>|</span> <span class=n>i</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>10</span>	    <span class=p>}</span>
+<span class=mi>11</span>	    <span class=n>sum</span> <span class=o>=</span> <span class=n>sum</span> <span class=o>&lt;</span><span class=o>&lt;</span> <span class=mi>4</span><span class=p>;</span>
+<span class=mi>12</span>	    <span class=k>return</span> <span class=n>sum</span><span class=p>;</span>
+<span class=mi>13</span>	<span class=p>}</span>
+<span class=mi>14</span>
+<span class=mi>15</span>	<span class=kt>void</span> <span class=nf>show_platform</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>16</span>	    <span class=n>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>sizeof(int) = %zu</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>17</span>	    <span class=n>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>sizeof(double) = %zu</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>double</span><span class=p>)</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>18</span>	    <span class=k>return</span><span class=p>;</span>
+<span class=mi>19</span>	<span class=p>}</span>
+<span class=mi>20</span>
+<span class=mi>21</span>	<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>22</span>	    <span class=kt>int</span> <span class=n>x</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>
+<span class=mi>23</span>	    <span class=kt>int</span> <span class=n>y</span> <span class=o>=</span> <span class=mi>4</span><span class=p>;</span>
+<span class=mi>24</span>	    <span class=kt>int</span> <span class=n>sum</span> <span class=o>=</span> <span class=n>magic</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>25</span>	    <span class=n>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>magic_num = %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>sum</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>26</span>	    <span class=n>show_platform</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>27</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>28</span>	<span class=p>}</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>b</span> <span class=mi>7</span>
+<span class=n>Breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x100000e38</span><span class=o>:</span> <span class=n>file</span> <span class=n>gdb_finish</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>7.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>r</span>
+<span class=n>Starting</span> <span class=nl>program</span><span class=p>:</span> <span class=o>/</span><span class=n>Users</span><span class=o>/</span><span class=n>wg</span><span class=o>/</span><span class=n>develop</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>gdb_finish</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1103</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>14830</span><span class=p>]</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1403</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>14830</span><span class=p>]</span>
+
+<span class=n>Thread</span> <span class=mi>2</span> <span class=n>hit</span> <span class=n>Breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>magic</span> <span class=p>(</span><span class=n>x</span><span class=o>=</span><span class=mi>2</span><span class=p>,</span> <span class=n>y</span><span class=o>=</span><span class=mi>4</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_finish</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>7</span>
+<span class=mi>7</span>	    <span class=n>sum</span> <span class=o>=</span> <span class=p>(</span><span class=n>x</span> <span class=o>*</span> <span class=n>y</span><span class=p>)</span> <span class=o>+</span> <span class=p>(</span><span class=n>x</span> <span class=o>*</span> <span class=n>y</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>locals</span>
+<span class=n>seed</span> <span class=o>=</span> <span class=mi>127</span>
+<span class=n>sum</span> <span class=o>=</span> <span class=mi>0</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>args</span>
+<span class=n>x</span> <span class=o>=</span> <span class=mi>2</span>
+<span class=n>y</span> <span class=o>=</span> <span class=mi>4</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>finish</span>
+<span class=n>Run</span> <span class=n>till</span> <span class=n>exit</span> <span class=n>from</span> <span class=err>#</span><span class=mi>0</span>  <span class=n>magic</span> <span class=p>(</span><span class=n>x</span><span class=o>=</span><span class=mi>2</span><span class=p>,</span> <span class=n>y</span><span class=o>=</span><span class=mi>4</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_finish</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>7</span>
+<span class=mh>0x0000000100000f28</span> <span class=n>in</span> <span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_finish</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>24</span>
+<span class=mi>24</span>	    <span class=kt>int</span> <span class=n>sum</span> <span class=o>=</span> <span class=n>magic</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>)</span><span class=p>;</span>
+<span class=n>Value</span> <span class=n>returned</span> <span class=n>is</span> <span class=err>$</span><span class=mi>1</span> <span class=o>=</span> <span class=mi>8192</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>n</span>
+<span class=mi>25</span>	    <span class=n>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>magic_num = %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>sum</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>n</span>
+<span class=n>magic_num</span> <span class=o>=</span> <span class=mi>8192</span>
+<span class=mi>26</span>	    <span class=n>show_platform</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+</code></pre></td></tr></table></div></div><h3 id=查看函数堆栈信息>查看函数堆栈信息</h3><p>我们可以使用<code>backtrace</code>查看函数的调用堆栈信息，然后借助<code>frame</code>命令可以查看具体的栈帧信息。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>gdb_finish</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>gdb_finish</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdlib</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>3</span>
+<span class=mi>4</span>	<span class=kt>void</span> <span class=n>show_platform</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>5</span>	    <span class=nf>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>sizeof(int)</span> <span class=o>=</span> <span class=o>%</span><span class=n>zu</span><span class=err>\</span><span class=n>n</span><span class=sa></span><span class=s>&#34;</span><span class=s>, sizeof(int))</span><span class=p>;</span>
+<span class=mi>6</span>	    <span class=nf>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>sizeof(double)</span> <span class=o>=</span> <span class=o>%</span><span class=n>zu</span><span class=err>\</span><span class=n>n</span><span class=sa></span><span class=s>&#34;</span><span class=s>, sizeof(double))</span><span class=p>;</span>
+<span class=mi>7</span>	    <span class=k>return</span><span class=p>;</span>
+<span class=mi>8</span>	<span class=p>}</span>
+<span class=mi>9</span>
+<span class=mi>10</span>	<span class=kt>int</span> <span class=nf>magic</span><span class=p>(</span><span class=kt>int</span> <span class=n>x</span><span class=p>,</span> <span class=kt>int</span> <span class=n>y</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>11</span>	    <span class=kt>int</span> <span class=n>seed</span> <span class=o>=</span> <span class=mi>127</span><span class=p>;</span>
+<span class=mi>12</span>	    <span class=kt>int</span> <span class=n>sum</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>13</span>	    <span class=n>sum</span> <span class=o>=</span> <span class=p>(</span><span class=n>x</span> <span class=o>*</span> <span class=n>y</span><span class=p>)</span> <span class=o>+</span> <span class=p>(</span><span class=n>x</span> <span class=o>*</span> <span class=n>y</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>14</span>	    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>128</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>15</span>	        <span class=n>sum</span> <span class=o>+</span><span class=o>=</span> <span class=n>sum</span> <span class=o>&amp;</span> <span class=n>seed</span> <span class=o>+</span> <span class=p>(</span><span class=n>x</span> <span class=o>&amp;</span> <span class=n>i</span><span class=p>)</span> <span class=o>+</span> <span class=p>(</span><span class=n>y</span> <span class=o>|</span> <span class=n>i</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>16</span>	    <span class=p>}</span>
+<span class=mi>17</span>	    <span class=n>sum</span> <span class=o>=</span> <span class=n>sum</span> <span class=o>&lt;</span><span class=o>&lt;</span> <span class=mi>4</span><span class=p>;</span>
+<span class=mi>18</span>	    <span class=n>show_platform</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>19</span>	    <span class=k>return</span> <span class=n>sum</span><span class=p>;</span>
+<span class=mi>20</span>	<span class=p>}</span>
+<span class=mi>21</span>
+<span class=mi>22</span>	<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>23</span>	    <span class=kt>int</span> <span class=n>x</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>
+<span class=mi>24</span>	    <span class=kt>int</span> <span class=n>y</span> <span class=o>=</span> <span class=mi>4</span><span class=p>;</span>
+<span class=mi>25</span>	    <span class=kt>int</span> <span class=n>sum</span> <span class=o>=</span> <span class=n>magic</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>26</span>	    <span class=n>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>magic_num = %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>sum</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>27</span>	    <span class=n>show_platform</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>28</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>29</span>	<span class=p>}</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>b</span> <span class=mi>5</span>
+<span class=n>Breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x100000e2d</span><span class=o>:</span> <span class=n>file</span> <span class=n>gdb_finish</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>5.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>r</span>
+<span class=n>Starting</span> <span class=nl>program</span><span class=p>:</span> <span class=o>/</span><span class=n>Users</span><span class=o>/</span><span class=n>wg</span><span class=o>/</span><span class=n>develop</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>gdb_finish</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1103</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>23988</span><span class=p>]</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1403</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>23988</span><span class=p>]</span>
+
+<span class=n>Thread</span> <span class=mi>2</span> <span class=n>hit</span> <span class=n>Breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>show_platform</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_finish</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>5</span>
+<span class=mi>5</span>	    <span class=n>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>sizeof(int) = %zu</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>backtrace</span>
+<span class=cp>#</span><span class=cp>0  show_platform () at gdb_finish.c:5</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>1  0x0000000100000eed in magic (x=2, y=4) at gdb_finish.c:18</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>2  0x0000000100000f28 in main () at gdb_finish.c:25</span><span class=cp>
+</span><span class=cp></span><span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>bt</span>
+<span class=cp>#</span><span class=cp>0  show_platform () at gdb_finish.c:5</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>1  0x0000000100000eed in magic (x=2, y=4) at gdb_finish.c:18</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>2  0x0000000100000f28 in main () at gdb_finish.c:25</span><span class=cp>
+</span><span class=cp></span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>frame</span> <span class=mi>1</span>
+<span class=cp>#</span><span class=cp>1  0x0000000100000eed in magic (x=2, y=4) at gdb_finish.c:18</span><span class=cp>
+</span><span class=cp></span><span class=mi>18</span>	    <span class=n>show_platform</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>args</span>
+<span class=n>x</span> <span class=o>=</span> <span class=mi>2</span>
+<span class=n>y</span> <span class=o>=</span> <span class=mi>4</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>frame</span> <span class=mi>2</span>
+<span class=cp>#</span><span class=cp>2  0x0000000100000f28 in main () at gdb_finish.c:25</span><span class=cp>
+</span><span class=cp></span><span class=mi>25</span>	    <span class=kt>int</span> <span class=n>sum</span> <span class=o>=</span> <span class=n>magic</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>locals</span>
+<span class=n>x</span> <span class=o>=</span> <span class=mi>2</span>
+<span class=n>y</span> <span class=o>=</span> <span class=mi>4</span>
+<span class=n>sum</span> <span class=o>=</span> <span class=mi>1606416368</span>
+</code></pre></td></tr></table></div></div><h2 id=观察点>观察点</h2><h3 id=设置观察点>设置观察点</h3><p><code>gdb</code>可以使用<code>watch</code>命令设置观察点，也就是当一个变量值发生变化时，程序会暂停下来。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>gdb_watch</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>gdb_watch</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>
+<span class=mi>3</span>	<span class=kt>int</span> <span class=n>main</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>4</span>	    <span class=kt>int</span> <span class=n>sum</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>5</span>	    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>128</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>6</span>	        <span class=n>sum</span> <span class=o>+</span><span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+<span class=mi>7</span>	    <span class=p>}</span>
+<span class=mi>8</span>	    <span class=nf>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>sum = %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>sum</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>9</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>10</span>	<span class=p>}</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>start</span>
+<span class=n>Temporary</span> <span class=n>breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x100000f2f</span><span class=o>:</span> <span class=n>file</span> <span class=n>gdb_watch</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>4.</span>
+<span class=n>Starting</span> <span class=nl>program</span><span class=p>:</span> <span class=o>/</span><span class=n>Users</span><span class=o>/</span><span class=n>wg</span><span class=o>/</span><span class=n>develop</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>gdb_watch</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1103</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>40461</span><span class=p>]</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1403</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>40461</span><span class=p>]</span>
+
+<span class=n>Thread</span> <span class=mi>2</span> <span class=n>hit</span> <span class=n>Temporary</span> <span class=n>breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_watch</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>4</span>
+<span class=mi>4</span>	    <span class=kt>int</span> <span class=n>sum</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>watch</span> <span class=n>sum</span>
+<span class=n>Hardware</span> <span class=n>watchpoint</span> <span class=mi>2</span><span class=o>:</span> <span class=n>sum</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>n</span>
+
+<span class=n>Thread</span> <span class=mi>2</span> <span class=n>hit</span> <span class=n>Hardware</span> <span class=n>watchpoint</span> <span class=mi>2</span><span class=o>:</span> <span class=n>sum</span>
+
+<span class=n>Old</span> <span class=n>value</span> <span class=o>=</span> <span class=mi>16438</span>
+<span class=n>New</span> <span class=n>value</span> <span class=o>=</span> <span class=mi>0</span>
+<span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_watch</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>5</span>
+<span class=mi>5</span>	    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>128</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>6</span>	        <span class=n>sum</span> <span class=o>+</span><span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>5</span>	    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>128</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>6</span>	        <span class=n>sum</span> <span class=o>+</span><span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+
+<span class=n>Thread</span> <span class=mi>2</span> <span class=n>hit</span> <span class=n>Hardware</span> <span class=n>watchpoint</span> <span class=mi>2</span><span class=o>:</span> <span class=n>sum</span>
+
+<span class=n>Old</span> <span class=n>value</span> <span class=o>=</span> <span class=mi>0</span>
+<span class=n>New</span> <span class=n>value</span> <span class=o>=</span> <span class=mi>1</span>
+<span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_watch</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>5</span>
+<span class=mi>5</span>	    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>128</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>6</span>	        <span class=n>sum</span> <span class=o>+</span><span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+
+<span class=n>Thread</span> <span class=mi>2</span> <span class=n>hit</span> <span class=n>Hardware</span> <span class=n>watchpoint</span> <span class=mi>2</span><span class=o>:</span> <span class=n>sum</span>
+
+<span class=n>Old</span> <span class=n>value</span> <span class=o>=</span> <span class=mi>1</span>
+<span class=n>New</span> <span class=n>value</span> <span class=o>=</span> <span class=mi>3</span>
+<span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_watch</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>5</span>
+<span class=mi>5</span>	    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>128</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>c</span>
+<span class=n>Continuing</span><span class=p>.</span>
+
+<span class=n>Thread</span> <span class=mi>2</span> <span class=n>hit</span> <span class=n>Hardware</span> <span class=n>watchpoint</span> <span class=mi>2</span><span class=o>:</span> <span class=n>sum</span>
+
+<span class=n>Old</span> <span class=n>value</span> <span class=o>=</span> <span class=mi>3</span>
+<span class=n>New</span> <span class=n>value</span> <span class=o>=</span> <span class=mi>6</span>
+<span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_watch</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>5</span>
+<span class=mi>5</span>	    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>128</span><span class=p>;</span> <span class=o>+</span><span class=o>+</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>watchpoints</span>
+<span class=n>Num</span>     <span class=n>Type</span>           <span class=n>Disp</span> <span class=n>Enb</span> <span class=n>Address</span>            <span class=n>What</span>
+<span class=mi>2</span>       <span class=n>hw</span> <span class=n>watchpoint</span>  <span class=n>keep</span> <span class=n>y</span>                      <span class=n>sum</span>
+	<span class=n>breakpoint</span> <span class=n>already</span> <span class=n>hit</span> <span class=mi>8</span> <span class=n>times</span>
+</code></pre></td></tr></table></div></div><h3 id=设置读写观察点>设置读写观察点</h3><p>我们使用<code>awatch</code>命令设置读写观察点，每次读取或者改变观察点所观察的值时程序都会暂停下来。
+PS：需要注意的是<code>awatch</code>命令只对硬件观察点才生效。</p><ul><li>断点分为两类：硬件断点和软件断点。硬件断点需要目标 CPU 的支持，其使用硬件提供的断点寄存器来与设置断点的地址进行匹配，断点寄存器的数量是有限的。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>gdb_rwwatch</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>gdb_rwwatch</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdlib</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>3</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>pthread</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>4</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>unistd</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>5</span>
+<span class=mi>6</span>	<span class=kt>int</span> <span class=n>a</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>7</span>	<span class=kt>int</span> <span class=n>stop</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>8</span>
+<span class=mi>9</span>	<span class=kt>void</span> <span class=o>*</span><span class=nf>thread_write_func</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>arg</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>10</span>	    <span class=n>arg</span><span class=p>;</span>
+<span class=mi>11</span>	    <span class=k>while</span> <span class=p>(</span><span class=o>!</span><span class=n>stop</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>12</span>	        <span class=o>+</span><span class=o>+</span><span class=n>a</span><span class=p>;</span>
+<span class=mi>13</span>	        <span class=n>sleep</span><span class=p>(</span><span class=mi>10</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>14</span>	    <span class=p>}</span>
+<span class=mi>15</span>
+<span class=mi>16</span>	    <span class=k>return</span> <span class=nb>NULL</span><span class=p>;</span>
+<span class=mi>17</span>	<span class=p>}</span>
+<span class=mi>18</span>
+<span class=mi>19</span>	<span class=kt>void</span> <span class=o>*</span><span class=nf>thread_read_func</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>arg</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>20</span>	    <span class=n>arg</span><span class=p>;</span>
+<span class=mi>21</span>	    <span class=k>while</span> <span class=p>(</span><span class=o>!</span><span class=n>stop</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>22</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>a = %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>a</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>23</span>	        <span class=n>sleep</span><span class=p>(</span><span class=mi>10</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>24</span>	    <span class=p>}</span>
+<span class=mi>25</span>	    <span class=k>return</span> <span class=nb>NULL</span><span class=p>;</span>
+<span class=mi>26</span>	<span class=p>}</span>
+<span class=mi>27</span>
+<span class=mi>28</span>	<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>29</span>	    <span class=n>pthread_t</span> <span class=n>t1</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>30</span>	    <span class=n>pthread_t</span> <span class=n>t2</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>31</span>
+<span class=mi>32</span>	    <span class=n>pthread_create</span><span class=p>(</span><span class=o>&amp;</span><span class=n>t1</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=n>thread_write_func</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>33</span>	    <span class=n>pthread_create</span><span class=p>(</span><span class=o>&amp;</span><span class=n>t2</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=n>thread_read_func</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>34</span>
+<span class=mi>35</span>	    <span class=n>sleep</span><span class=p>(</span><span class=mi>1000</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>36</span>	    <span class=n>stop</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+<span class=mi>37</span>	    <span class=n>sleep</span><span class=p>(</span><span class=mi>10</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>38</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>39</span>	<span class=p>}</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>awatch</span> <span class=n>a</span>
+<span class=n>Hardware</span> <span class=n>access</span> <span class=p>(</span><span class=n>read</span><span class=o>/</span><span class=n>write</span><span class=p>)</span> <span class=n>watchpoint</span> <span class=mi>1</span><span class=o>:</span> <span class=n>a</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>watchpoints</span>
+<span class=n>Num</span>     <span class=n>Type</span>           <span class=n>Disp</span> <span class=n>Enb</span> <span class=n>Address</span>    <span class=n>What</span>
+<span class=mi>1</span>       <span class=n>acc</span> <span class=n>watchpoint</span> <span class=n>keep</span> <span class=n>y</span>              <span class=n>a</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>r</span>
+
+<span class=n>Using</span> <span class=n>host</span> <span class=n>libthread_db</span> <span class=n>library</span> <span class=sa></span><span class=s>&#34;</span><span class=s>/lib64/libthread_db.so.1</span><span class=s>&#34;</span><span class=p>.</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x7ffff77f0700</span> <span class=p>(</span><span class=n>LWP</span> <span class=mi>8798</span><span class=p>)</span><span class=p>]</span>
+<span class=p>[</span><span class=n>Switching</span> <span class=n>to</span> <span class=n>Thread</span> <span class=mh>0x7ffff77f0700</span> <span class=p>(</span><span class=n>LWP</span> <span class=mi>8798</span><span class=p>)</span><span class=p>]</span>
+<span class=n>Hardware</span> <span class=n>access</span> <span class=p>(</span><span class=n>read</span><span class=o>/</span><span class=n>write</span><span class=p>)</span> <span class=n>watchpoint</span> <span class=mi>1</span><span class=o>:</span> <span class=n>a</span>
+
+<span class=n>Value</span> <span class=o>=</span> <span class=mi>0</span>
+<span class=mh>0x0000000000400641</span> <span class=n>in</span> <span class=n>thread_write_func</span> <span class=p>(</span><span class=n>arg</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_rwwatch</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>12</span>
+<span class=mi>12</span>	        <span class=o>+</span><span class=o>+</span><span class=n>a</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>c</span>
+<span class=n>Continuing</span><span class=p>.</span>
+<span class=n>Hardware</span> <span class=n>access</span> <span class=p>(</span><span class=n>read</span><span class=o>/</span><span class=n>write</span><span class=p>)</span> <span class=n>watchpoint</span> <span class=mi>1</span><span class=o>:</span> <span class=n>a</span>
+
+<span class=n>Old</span> <span class=n>value</span> <span class=o>=</span> <span class=mi>0</span>
+<span class=n>New</span> <span class=n>value</span> <span class=o>=</span> <span class=mi>1</span>
+<span class=n>thread_write_func</span> <span class=p>(</span><span class=n>arg</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_rwwatch</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>13</span>
+<span class=mi>13</span>	        <span class=n>sleep</span><span class=p>(</span><span class=mi>10</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>c</span>
+<span class=n>Continuing</span><span class=p>.</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x7ffff6fef700</span> <span class=p>(</span><span class=n>LWP</span> <span class=mi>8799</span><span class=p>)</span><span class=p>]</span>
+<span class=p>[</span><span class=n>Switching</span> <span class=n>to</span> <span class=n>Thread</span> <span class=mh>0x7ffff6fef700</span> <span class=p>(</span><span class=n>LWP</span> <span class=mi>8799</span><span class=p>)</span><span class=p>]</span>
+<span class=n>Hardware</span> <span class=n>access</span> <span class=p>(</span><span class=n>read</span><span class=o>/</span><span class=n>write</span><span class=p>)</span> <span class=n>watchpoint</span> <span class=mi>1</span><span class=o>:</span> <span class=n>a</span>
+
+<span class=n>Value</span> <span class=o>=</span> <span class=mi>1</span>
+<span class=mh>0x0000000000400679</span> <span class=n>in</span> <span class=n>thread_read_func</span> <span class=p>(</span><span class=n>arg</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_rwwatch</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>22</span>
+<span class=mi>22</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stdout</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>a = %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>a</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>c</span>
+<span class=n>Continuing</span><span class=p>.</span>
+<span class=n>a</span> <span class=o>=</span> <span class=mi>1</span>
+<span class=p>[</span><span class=n>Switching</span> <span class=n>to</span> <span class=n>Thread</span> <span class=mh>0x7ffff77f0700</span> <span class=p>(</span><span class=n>LWP</span> <span class=mi>8798</span><span class=p>)</span><span class=p>]</span>
+<span class=n>Hardware</span> <span class=n>access</span> <span class=p>(</span><span class=n>read</span><span class=o>/</span><span class=n>write</span><span class=p>)</span> <span class=n>watchpoint</span> <span class=mi>1</span><span class=o>:</span> <span class=n>a</span>
+
+<span class=n>Value</span> <span class=o>=</span> <span class=mi>1</span>
+<span class=mh>0x0000000000400641</span> <span class=n>in</span> <span class=n>thread_write_func</span> <span class=p>(</span><span class=n>arg</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span> <span class=n>at</span> <span class=n>gdb_rwwatch</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>12</span>
+<span class=mi>12</span>	        <span class=o>+</span><span class=o>+</span><span class=n>a</span><span class=p>;</span>
+
+</code></pre></td></tr></table></div></div><h2 id=多进程多线程>多进程/多线程</h2><h3 id=调试子进程>调试子进程</h3><p>在调试多进程程序时，gdb默认会追踪父进程，如下所示：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>test_gdb_fork</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdlib</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>3</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>sys</span><span class=o>/</span><span class=n>types</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>4</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>unistd</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>5</span>
+<span class=mi>6</span>	<span class=kt>int</span> <span class=n>main</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>7</span>	    <span class=n>pid_t</span> <span class=n>pid</span> <span class=o>=</span> <span class=n>fork</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>8</span>	    <span class=nf>if</span> <span class=p>(</span><span class=n>pid</span> <span class=o>=</span><span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>9</span>	        <span class=n>perror</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>call fork failed </span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>10</span>	        <span class=n>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>11</span>	    <span class=p>}</span> <span class=k>else</span> <span class=nf>if</span><span class=p>(</span><span class=n>pid</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>     <span class=c1>// parent process
+</span><span class=c1></span><span class=mi>12</span>	        <span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>13</span>	    <span class=p>}</span>
+<span class=mi>14</span>
+<span class=mi>15</span>	    <span class=nf>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>Hello fork.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>16</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>17</span>	<span class=p>}</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>start</span>
+<span class=n>Temporary</span> <span class=n>breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x100000edf</span><span class=o>:</span> <span class=n>file</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>7.</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1103</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>3742</span><span class=p>]</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1403</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>3742</span><span class=p>]</span>
+
+<span class=n>Thread</span> <span class=mi>2</span> <span class=n>hit</span> <span class=n>Temporary</span> <span class=n>breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>7</span>
+<span class=mi>7</span>	    <span class=n>pid_t</span> <span class=n>pid</span> <span class=o>=</span> <span class=n>fork</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>n</span>
+<span class=mi>8</span>	    <span class=k>if</span> <span class=p>(</span><span class=n>pid</span> <span class=o>=</span><span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>11</span>	    <span class=p>}</span> <span class=k>else</span> <span class=nf>if</span><span class=p>(</span><span class=n>pid</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>     <span class=c1>// parent process {
+</span><span class=c1></span><span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>12</span>	        <span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=p>[</span><span class=n>Inferior</span> <span class=mi>1</span> <span class=p>(</span><span class=n>process</span> <span class=mi>3742</span><span class=p>)</span> <span class=n>exited</span> <span class=n>normally</span><span class=p>]</span>
+</code></pre></td></tr></table></div></div><p>可以看到程序执行到第12行：父进程退出。
+如果要调试子进程，要使用如下命令：<code>set follow-fork-mode child</code>，例如：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>test_gdb_fork</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=p>.</span><span class=p>.</span><span class=n>done</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>set</span> <span class=n>follow</span><span class=o>-</span><span class=n>fork</span><span class=o>-</span><span class=n>mode</span> <span class=n>child</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>start</span>
+<span class=n>Temporary</span> <span class=n>breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x400635</span><span class=o>:</span> <span class=n>file</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>7.</span>
+
+<span class=n>Temporary</span> <span class=n>breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>7</span>
+<span class=mi>7</span>	    <span class=n>pid_t</span> <span class=n>pid</span> <span class=o>=</span> <span class=n>fork</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>n</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>process</span> <span class=mi>19341</span><span class=p>]</span>
+<span class=p>[</span><span class=n>Switching</span> <span class=n>to</span> <span class=n>process</span> <span class=mi>19341</span><span class=p>]</span>
+<span class=mi>8</span>	    <span class=k>if</span> <span class=p>(</span><span class=n>pid</span> <span class=o>=</span><span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>11</span>	    <span class=p>}</span> <span class=k>else</span> <span class=nf>if</span><span class=p>(</span><span class=n>pid</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>     <span class=c1>// parent process
+</span><span class=c1></span><span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>15</span>	    <span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>Hello fork.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=n>Hello</span> <span class=n>fork</span><span class=p>.</span>
+<span class=mi>16</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>17</span>	<span class=p>}</span>
+</code></pre></td></tr></table></div></div><p>可以看到程序执行到第15行：子进程打印"hello fork&rdquo;。</p><blockquote><p>请在程序调用fork之前设置<code>set follow-fork-mode child</code>。
+这个命令目前只有<code>Linux</code>支持，其它很多操作系统都不支持，使用时请注意。</p></blockquote><h3 id=同时调试子进程和父进程>同时调试子进程和父进程</h3><p>在调试多进程程序时，gdb默认只会追踪父进程的运行，而子进程会独立运行，gdb不会控制。以下面程序为例，可以看到父进程执行到第8行的时候子进程已经运行并输出了信息：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>test_gdb_fork</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=p>.</span><span class=p>.</span><span class=n>done</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdlib</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>3</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>sys</span><span class=o>/</span><span class=n>types</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>4</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>unistd</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>5</span>
+<span class=mi>6</span>	<span class=kt>int</span> <span class=n>main</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>7</span>	    <span class=n>pid_t</span> <span class=n>pid</span> <span class=o>=</span> <span class=n>fork</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>8</span>	    <span class=nf>if</span> <span class=p>(</span><span class=n>pid</span> <span class=o>=</span><span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>9</span>	        <span class=n>perror</span><span class=p>(</span><span class=sa></span><span class=s>&#34;</span><span class=s>call fork failed </span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>10</span>	        <span class=n>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>11</span>	    <span class=p>}</span> <span class=k>else</span> <span class=nf>if</span><span class=p>(</span><span class=n>pid</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>     <span class=c1>// parent process {
+</span><span class=c1></span><span class=mi>12</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>I am parent process</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>13</span>	        <span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>14</span>	    <span class=p>}</span>
+<span class=mi>15</span>
+<span class=mi>16</span>	    <span class=nf>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>I am child process</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>17</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>18</span>	<span class=p>}</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>start</span>
+<span class=n>Temporary</span> <span class=n>breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x400665</span><span class=o>:</span> <span class=n>file</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>7.</span>
+
+<span class=n>Temporary</span> <span class=n>breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>7</span>
+<span class=mi>7</span>	    <span class=n>pid_t</span> <span class=n>pid</span> <span class=o>=</span> <span class=n>fork</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>n</span>
+<span class=n>Detaching</span> <span class=n>after</span> <span class=n>fork</span> <span class=n>from</span> <span class=n>child</span> <span class=n>process</span> <span class=mf>23495.</span>
+<span class=n>I</span> <span class=n>am</span> <span class=n>child</span> <span class=n>process</span>
+<span class=mi>8</span>	    <span class=k>if</span> <span class=p>(</span><span class=n>pid</span> <span class=o>=</span><span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>11</span>	    <span class=p>}</span> <span class=k>else</span> <span class=nf>if</span><span class=p>(</span><span class=n>pid</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>     <span class=c1>// parent process {
+</span><span class=c1></span><span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>12</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>I am parent process</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=n>I</span> <span class=n>am</span> <span class=n>parent</span> <span class=n>process</span>
+<span class=mi>13</span>	        <span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=p>[</span><span class=n>Inferior</span> <span class=mi>1</span> <span class=p>(</span><span class=n>process</span> <span class=mi>23477</span><span class=p>)</span> <span class=n>exited</span> <span class=n>normally</span><span class=p>]</span>
+</code></pre></td></tr></table></div></div><p>如果要同时调试父进程和子进程(调试父进程的时候子进程处于停止状态)，可以使用<code>set detach-on-fork off</code>（默认 <code>detach-on-fork</code>的值是 <code>on</code> ）命令，这样就能同时调试父子进程，并且在调试一个进程时，另外一个进程处于挂起状态。仍以上面程序为例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>test_gdb_fork</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=p>.</span><span class=p>.</span><span class=n>done</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>show</span> <span class=n>detach</span><span class=o>-</span><span class=n>on</span><span class=o>-</span><span class=n>fork</span>
+<span class=n>Whether</span> <span class=n>gdb</span> <span class=n>will</span> <span class=n>detach</span> <span class=n>the</span> <span class=n>child</span> <span class=n>of</span> <span class=n>a</span> <span class=n>fork</span> <span class=n>is</span> <span class=n>on</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>set</span> <span class=n>detach</span><span class=o>-</span><span class=n>on</span><span class=o>-</span><span class=n>fork</span> <span class=n>off</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>start</span>
+<span class=n>Temporary</span> <span class=n>breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x400665</span><span class=o>:</span> <span class=n>file</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>7.</span>
+
+<span class=n>Temporary</span> <span class=n>breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>main</span> <span class=p>(</span><span class=p>)</span> <span class=n>at</span> <span class=n>test_gdb_fork</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>7</span>
+<span class=mi>7</span>	    <span class=n>pid_t</span> <span class=n>pid</span> <span class=o>=</span> <span class=n>fork</span><span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>n</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>process</span> <span class=mi>25321</span><span class=p>]</span>
+<span class=mi>8</span>	    <span class=k>if</span> <span class=p>(</span><span class=n>pid</span> <span class=o>=</span><span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>11</span>	    <span class=p>}</span> <span class=k>else</span> <span class=nf>if</span><span class=p>(</span><span class=n>pid</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>     <span class=c1>// parent process {
+</span><span class=c1></span><span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>12</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>I am parent process</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=n>I</span> <span class=n>am</span> <span class=n>parent</span> <span class=n>process</span>
+<span class=mi>13</span>	        <span class=n>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>inferiors</span>
+  <span class=n>Num</span>  <span class=n>Description</span>       <span class=n>Executable</span>
+  <span class=mi>2</span>    <span class=n>process</span> <span class=mi>25321</span>     <span class=n>study</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>test_gdb_fork</span>
+<span class=o>*</span> <span class=mi>1</span>    <span class=n>process</span> <span class=mi>25314</span>     <span class=n>study</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>test_gdb_fork</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>inferior</span> <span class=mi>2</span>
+<span class=p>[</span><span class=n>Switching</span> <span class=n>to</span> <span class=n>inferior</span> <span class=mi>2</span> <span class=p>[</span><span class=n>process</span> <span class=mi>25321</span><span class=p>]</span> <span class=p>(</span><span class=n>study</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>test_gdb_fork</span><span class=p>)</span><span class=p>]</span>
+<span class=p>[</span><span class=n>Switching</span> <span class=n>to</span> <span class=kr>thread</span> <span class=mi>2</span> <span class=p>(</span><span class=n>process</span> <span class=mi>25321</span><span class=p>)</span><span class=p>]</span>
+<span class=cp>#</span><span class=cp>0  0x00007ffff72b3922 in __libc_fork ()</span><span class=cp>
+</span><span class=cp></span>    <span class=n>at</span> <span class=p>.</span><span class=p>.</span><span class=o>/</span><span class=n>nptl</span><span class=o>/</span><span class=n>sysdeps</span><span class=o>/</span><span class=n>unix</span><span class=o>/</span><span class=n>sysv</span><span class=o>/</span><span class=n>linux</span><span class=o>/</span><span class=n>fork</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>136</span>
+<span class=mi>136</span>	  <span class=n>pid</span> <span class=o>=</span> <span class=n>ARCH_FORK</span> <span class=p>(</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>inferiors</span>
+  <span class=n>Num</span>  <span class=n>Description</span>       <span class=n>Executable</span>
+<span class=o>*</span> <span class=mi>2</span>    <span class=n>process</span> <span class=mi>25321</span>     <span class=n>study</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>test_gdb_fork</span>
+  <span class=mi>1</span>    <span class=n>process</span> <span class=mi>25314</span>     <span class=n>study</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>test_gdb_fork</span>
+</code></pre></td></tr></table></div></div><p>在使用<code>set detach-on-fork off</code>命令后，执行<code>info inferiors</code>查看进程状态，可以看到父子进程都在被<code>gdb</code>调试的状态，前面显示"<code>*</code>"是正在调试的进程。当父进程退出后，用<code>inferior infno</code>切换到子进程去调试。</p><blockquote><p>请注意这个命令目前只有Linux支持，其它很多操作系统都不支持。</p></blockquote><h3 id=查看线程信息>查看线程信息</h3><p>用<code>gdb</code>调试多线程程序，可以用<code>info threads</code>命令查看所有线程的信息，以下面的程序为例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>test_gdb_threads</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>test_gdb_threads</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdlib</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>3</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>unistd</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>4</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>pthread</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>5</span>
+<span class=mi>6</span>	<span class=kt>void</span> <span class=o>*</span><span class=n>thread_func</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>arg</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>7</span>	    <span class=p>(</span><span class=kt>void</span><span class=p>)</span><span class=n>arg</span><span class=p>;</span>
+<span class=mi>8</span>	    <span class=nf>while</span> <span class=p>(</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>9</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>[pid:%d][tid:%d][debug] In thread.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span>
+<span class=mi>10</span>	                <span class=n>getpid</span><span class=p>(</span><span class=p>)</span><span class=p>,</span>  <span class=n>pthread_self</span><span class=p>(</span><span class=p>)</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>11</span>	        <span class=n>sleep</span><span class=p>(</span><span class=mi>30</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>12</span>	    <span class=p>}</span>
+<span class=mi>13</span>	    <span class=k>return</span> <span class=nb>NULL</span><span class=p>;</span>
+<span class=mi>14</span>	<span class=p>}</span>
+<span class=mi>15</span>
+<span class=mi>16</span>	<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>17</span>	    <span class=n>pthread_t</span> <span class=n>tids</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=p>;</span>
+<span class=mi>18</span>	    <span class=n>pthread_create</span><span class=p>(</span><span class=o>&amp;</span><span class=n>tids</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=n>thread_func</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>19</span>	    <span class=n>pthread_create</span><span class=p>(</span><span class=o>&amp;</span><span class=n>tids</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=n>thread_func</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>20</span>
+<span class=mi>21</span>	    <span class=n>pthread_join</span><span class=p>(</span><span class=n>tids</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>22</span>	    <span class=n>pthread_join</span><span class=p>(</span><span class=n>tids</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>23</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>24</span>	<span class=p>}</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>b</span> <span class=mi>9</span>
+<span class=n>Breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x100000e23</span><span class=o>:</span> <span class=n>file</span> <span class=n>test_gdb_threads</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>9.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>r</span>
+<span class=n>Starting</span> <span class=nl>program</span><span class=p>:</span> <span class=o>/</span><span class=n>Users</span><span class=o>/</span><span class=n>wg</span><span class=o>/</span><span class=n>develop</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>test_gdb_threads</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1103</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>48700</span><span class=p>]</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1403</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>48700</span><span class=p>]</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x120f</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>48700</span><span class=p>]</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1503</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>48700</span><span class=p>]</span>
+<span class=p>[</span><span class=n>Switching</span> <span class=n>to</span> <span class=n>Thread</span> <span class=mh>0x120f</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>48700</span><span class=p>]</span>
+
+<span class=n>Thread</span> <span class=mi>3</span> <span class=n>hit</span> <span class=n>Breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>thread_func</span> <span class=p>(</span><span class=n>arg</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span> <span class=n>at</span> <span class=n>test_gdb_threads</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>9</span>
+<span class=mi>9</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>[pid:%d][tid:%d][debug] In thread.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>info</span> <span class=n>threads</span>
+  <span class=n>Id</span>   <span class=n>Target</span> <span class=n>Id</span>                      <span class=n>Frame</span>
+  <span class=mi>2</span>    <span class=n>Thread</span> <span class=mh>0x1403</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>48700</span> <span class=mh>0x00007fff8f265f46</span> <span class=n>in</span> <span class=o>?</span><span class=o>?</span> <span class=p>(</span><span class=p>)</span>
+   <span class=n>from</span> <span class=o>/</span><span class=n>usr</span><span class=o>/</span><span class=n>lib</span><span class=o>/</span><span class=n>system</span><span class=o>/</span><span class=n>libsystem_kernel</span><span class=p>.</span><span class=n>dylib</span>
+<span class=o>*</span> <span class=mi>3</span>    <span class=n>Thread</span> <span class=mh>0x120f</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>48700</span> <span class=n>thread_func</span> <span class=p>(</span><span class=n>arg</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span> <span class=n>at</span> <span class=n>test_gdb_threads</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>9</span>
+  <span class=mi>4</span>    <span class=n>Thread</span> <span class=mh>0x1503</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>48700</span> <span class=n>thread_func</span> <span class=p>(</span><span class=n>arg</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span> <span class=n>at</span> <span class=n>test_gdb_threads</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>9</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>backtrace</span>
+<span class=cp>#</span><span class=cp>0  thread_func (arg=0x0) at test_gdb_threads.c:9</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>1  0x00007fff8f35093b in _pthread_body () from </span><span class=cp>/</span><span class=cp>usr</span><span class=cp>/</span><span class=cp>lib</span><span class=cp>/</span><span class=cp>system</span><span class=cp>/</span><span class=cp>libsystem_pthread.dylib</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>2  0x00007fff8f350887 in _pthread_start () from </span><span class=cp>/</span><span class=cp>usr</span><span class=cp>/</span><span class=cp>lib</span><span class=cp>/</span><span class=cp>system</span><span class=cp>/</span><span class=cp>libsystem_pthread.dylib</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>3  0x00007fff8f35008d in thread_start () from </span><span class=cp>/</span><span class=cp>usr</span><span class=cp>/</span><span class=cp>lib</span><span class=cp>/</span><span class=cp>system</span><span class=cp>/</span><span class=cp>libsystem_pthread.dylib</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>4  0x0000000000000000 in ?? ()</span><span class=cp>
+</span><span class=cp></span><span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=kr>thread</span> <span class=mi>4</span>
+<span class=p>[</span><span class=n>Switching</span> <span class=n>to</span> <span class=kr>thread</span> <span class=mi>4</span> <span class=p>(</span><span class=n>Thread</span> <span class=mh>0x1503</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>48700</span><span class=p>)</span><span class=p>]</span>
+<span class=cp>#</span><span class=cp>0  thread_func (arg=0x0) at test_gdb_threads.c:9</span><span class=cp>
+</span><span class=cp></span><span class=mi>9</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>[pid:%d][tid:%d][debug] In thread.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>backtrace</span>
+<span class=cp>#</span><span class=cp>0  thread_func (arg=0x0) at test_gdb_threads.c:9</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>1  0x00007fff8f35093b in _pthread_body () from </span><span class=cp>/</span><span class=cp>usr</span><span class=cp>/</span><span class=cp>lib</span><span class=cp>/</span><span class=cp>system</span><span class=cp>/</span><span class=cp>libsystem_pthread.dylib</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>2  0x00007fff8f350887 in _pthread_start () from </span><span class=cp>/</span><span class=cp>usr</span><span class=cp>/</span><span class=cp>lib</span><span class=cp>/</span><span class=cp>system</span><span class=cp>/</span><span class=cp>libsystem_pthread.dylib</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>3  0x00007fff8f35008d in thread_start () from </span><span class=cp>/</span><span class=cp>usr</span><span class=cp>/</span><span class=cp>lib</span><span class=cp>/</span><span class=cp>system</span><span class=cp>/</span><span class=cp>libsystem_pthread.dylib</span><span class=cp>
+</span><span class=cp></span><span class=cp>#</span><span class=cp>4  0x0000000000000000 in ?? ()</span><span class=cp>
+</span></code></pre></td></tr></table></div></div><h3 id=只允许一个线程运行>只允许一个线程运行</h3><p><strong>用<code>gdb</code>调试多线程程序时，一旦程序断住，所有的线程都处于暂停状态。此时当调试其中一个线程时（比如执行<code>step</code>，<code>next</code>命令），所有的线程都会同时执行</strong>。以下面程序为例:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++> <span class=err>$</span> <span class=n>gdb</span> <span class=o>-</span><span class=n>q</span> <span class=n>test_gdb_threads</span>
+<span class=n>Reading</span> <span class=n>symbols</span> <span class=n>from</span> <span class=n>test_gdb_threads</span><span class=p>.</span><span class=p>.</span><span class=p>.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>l</span>
+<span class=mi>1</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdio</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>2</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>stdlib</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>3</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>unistd</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>4</span>	<span class=err>#</span><span class=n>include</span> <span class=o>&lt;</span><span class=n>pthread</span><span class=p>.</span><span class=n>h</span><span class=o>&gt;</span>
+<span class=mi>5</span>
+<span class=mi>6</span>	<span class=kt>int</span> <span class=n>a</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>7</span>	<span class=kt>int</span> <span class=n>b</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>8</span>
+<span class=mi>9</span>	<span class=kt>void</span> <span class=o>*</span><span class=nf>thread_func1</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>arg</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>10</span>	    <span class=p>(</span><span class=kt>void</span><span class=p>)</span><span class=n>arg</span><span class=p>;</span>
+<span class=mi>11</span>	    <span class=k>while</span> <span class=p>(</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>12</span>	        <span class=o>+</span><span class=o>+</span><span class=n>a</span><span class=p>;</span>
+<span class=mi>13</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>[pid:%d][tid:%d][debug] In thread.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span>
+<span class=mi>14</span>	                <span class=n>getpid</span><span class=p>(</span><span class=p>)</span><span class=p>,</span>  <span class=n>pthread_self</span><span class=p>(</span><span class=p>)</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>15</span>	        <span class=n>sleep</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>16</span>	    <span class=p>}</span>
+<span class=mi>17</span>	    <span class=k>return</span> <span class=nb>NULL</span><span class=p>;</span>
+<span class=mi>18</span>	<span class=p>}</span>
+<span class=mi>19</span>
+<span class=mi>20</span>	<span class=kt>void</span> <span class=o>*</span><span class=nf>thread_func2</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>arg</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>21</span>	    <span class=p>(</span><span class=kt>void</span><span class=p>)</span><span class=n>arg</span><span class=p>;</span>
+<span class=mi>22</span>	    <span class=k>while</span> <span class=p>(</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>23</span>	        <span class=o>+</span><span class=o>+</span><span class=n>b</span><span class=p>;</span>
+<span class=mi>24</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>[pid:%d][tid:%d][debug] In thread.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span>
+<span class=mi>25</span>	                <span class=n>getpid</span><span class=p>(</span><span class=p>)</span><span class=p>,</span>  <span class=n>pthread_self</span><span class=p>(</span><span class=p>)</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>26</span>	        <span class=n>sleep</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>27</span>	    <span class=p>}</span>
+<span class=mi>28</span>	    <span class=k>return</span> <span class=nb>NULL</span><span class=p>;</span>
+<span class=mi>29</span>	<span class=p>}</span>
+<span class=mi>30</span>
+<span class=mi>31</span>	<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=p>)</span> <span class=p>{</span>
+<span class=mi>32</span>	    <span class=n>pthread_t</span> <span class=n>tids</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=p>;</span>
+<span class=mi>33</span>	    <span class=n>pthread_create</span><span class=p>(</span><span class=o>&amp;</span><span class=n>tids</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=n>thread_func1</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>34</span>	    <span class=n>pthread_create</span><span class=p>(</span><span class=o>&amp;</span><span class=n>tids</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=n>thread_func2</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>35</span>
+<span class=mi>36</span>	    <span class=n>pthread_join</span><span class=p>(</span><span class=n>tids</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>37</span>	    <span class=n>pthread_join</span><span class=p>(</span><span class=n>tids</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>)</span><span class=p>;</span>
+<span class=mi>38</span>	    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=mi>39</span>	<span class=p>}</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>b</span> <span class=mi>12</span>
+<span class=n>Breakpoint</span> <span class=mi>1</span> <span class=n>at</span> <span class=mh>0x100000da3</span><span class=o>:</span> <span class=n>file</span> <span class=n>test_gdb_threads</span><span class=p>.</span><span class=n>c</span><span class=p>,</span> <span class=n>line</span> <span class=mf>12.</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>r</span>
+<span class=n>Starting</span> <span class=nl>program</span><span class=p>:</span> <span class=o>/</span><span class=n>Users</span><span class=o>/</span><span class=n>wg</span><span class=o>/</span><span class=n>develop</span><span class=o>/</span><span class=n>c</span><span class=o>/</span><span class=n>test_gdb_threads</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1103</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>54356</span><span class=p>]</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1403</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>54356</span><span class=p>]</span>
+<span class=p>[</span><span class=nl>pid</span><span class=p>:</span><span class=mi>54356</span><span class=p>]</span><span class=p>[</span><span class=nl>tid</span><span class=p>:</span><span class=mi>70713344</span><span class=p>]</span><span class=p>[</span><span class=n>debug</span><span class=p>]</span> <span class=n>In</span> <span class=kr>thread</span><span class=p>.</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x120f</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>54356</span><span class=p>]</span>
+<span class=p>[</span><span class=n>New</span> <span class=n>Thread</span> <span class=mh>0x1503</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>54356</span><span class=p>]</span>
+<span class=p>[</span><span class=n>Switching</span> <span class=n>to</span> <span class=n>Thread</span> <span class=mh>0x120f</span> <span class=n>of</span> <span class=n>process</span> <span class=mi>54356</span><span class=p>]</span>
+
+<span class=n>Thread</span> <span class=mi>3</span> <span class=n>hit</span> <span class=n>Breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>thread_func1</span> <span class=p>(</span><span class=n>arg</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span> <span class=n>at</span> <span class=n>test_gdb_threads</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>12</span>
+<span class=mi>12</span>	        <span class=o>+</span><span class=o>+</span><span class=n>a</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>p</span> <span class=n>a</span>
+<span class=err>$</span><span class=mi>1</span> <span class=o>=</span> <span class=mi>0</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>p</span> <span class=n>b</span>
+<span class=err>$</span><span class=mi>2</span> <span class=o>=</span> <span class=mi>1</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>n</span>
+<span class=mi>13</span>	        <span class=n>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=sa></span><span class=s>&#34;</span><span class=s>[pid:%d][tid:%d][debug] In thread.</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span>
+<span class=mi>14</span>	                <span class=n>getpid</span><span class=p>(</span><span class=p>)</span><span class=p>,</span>  <span class=n>pthread_self</span><span class=p>(</span><span class=p>)</span><span class=p>)</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>c</span>
+<span class=n>Continuing</span><span class=p>.</span>
+<span class=p>[</span><span class=nl>pid</span><span class=p>:</span><span class=mi>54356</span><span class=p>]</span><span class=p>[</span><span class=nl>tid</span><span class=p>:</span><span class=mi>70176768</span><span class=p>]</span><span class=p>[</span><span class=n>debug</span><span class=p>]</span> <span class=n>In</span> <span class=kr>thread</span><span class=p>.</span>
+<span class=p>[</span><span class=nl>pid</span><span class=p>:</span><span class=mi>54356</span><span class=p>]</span><span class=p>[</span><span class=nl>tid</span><span class=p>:</span><span class=mi>70713344</span><span class=p>]</span><span class=p>[</span><span class=n>debug</span><span class=p>]</span> <span class=n>In</span> <span class=kr>thread</span><span class=p>.</span>
+<span class=p>[</span><span class=nl>pid</span><span class=p>:</span><span class=mi>54356</span><span class=p>]</span><span class=p>[</span><span class=nl>tid</span><span class=p>:</span><span class=mi>70713344</span><span class=p>]</span><span class=p>[</span><span class=n>debug</span><span class=p>]</span> <span class=n>In</span> <span class=kr>thread</span><span class=p>.</span>
+
+<span class=n>Thread</span> <span class=mi>3</span> <span class=n>hit</span> <span class=n>Breakpoint</span> <span class=mi>1</span><span class=p>,</span> <span class=n>thread_func1</span> <span class=p>(</span><span class=n>arg</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span> <span class=n>at</span> <span class=n>test_gdb_threads</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>12</span>
+<span class=mi>12</span>	        <span class=o>+</span><span class=o>+</span><span class=n>a</span><span class=p>;</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>p</span> <span class=n>b</span>
+<span class=err>$</span><span class=mi>3</span> <span class=o>=</span> <span class=mi>3</span>
+<span class=p>(</span><span class=n>gdb</span><span class=p>)</span> <span class=n>p</span> <span class=n>a</span>
+<span class=err>$</span><span class=mi>4</span> <span class=o>=</span> <span class=mi>1</span>
+</code></pre></td></tr></table></div></div><p>如果想在调试一个线程时，让其它线程暂停执行，可以使用<code>set scheduler-locking on</code>命令.</p><h2 id=todo>TODO</h2><h3 id=thread-apply-all>thread apply all</h3><h3 id=汇编>汇编</h3><h2 id=参考资料>参考资料</h2><p><a href=https://legacy.gitbook.com/book/wizardforcel/100-gdb-tips/details>https://legacy.gitbook.com/book/wizardforcel/100-gdb-tips/details</a></p></div><div class=post-copyright><p class=copyright-item><span class=item-title>文章作者</span>
+<span class=item-content>None</span></p><p class=copyright-item><span class=item-title>上次更新</span>
+<span class=item-content>2020-03-26</span></p><p class=copyright-item><span class=item-title>许可协议</span>
+<span class=item-content><a rel="license noopener" href=#https://creativecommons.org/licenses/by-nc-nd/4.0/ target=_blank>CC BY-NC-ND 4.0</a></span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/development/>Development</a>
+<a href=/tags/gdb/>GDB</a></div><nav class=post-nav><a class=next href=/post/file_system/><span class="next-text nav-default">Linux File system</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:your@email.com class="iconfont icon-email" title=email></a><a href=http://localhost:1313/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动</span>
+<span class=division>|</span>
+<span class=theme-info>主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span><div class=busuanzi-footer><span id=busuanzi_container_site_pv>本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次</span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv>本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人</span></div><span class=copyright-year>&copy;
+2020
+<span class=heart><i class="iconfont icon-heart"></i></span><span class=author>None</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/dist/even.26188efa.min.js></script></body></html>
