@@ -159,7 +159,7 @@
  <span class=mh>0xffffffffafd25a1b</span> <span class=o>:</span> <span class=n>tracesys</span><span class=o>+</span><span class=mh>0xa3</span><span class=o>/</span><span class=mh>0xc9</span> <span class=p>[</span><span class=n>kernel</span><span class=p>]</span>
  <span class=mh>0x7f739d56b9b0</span></code></pre></td></tr></table></div></div><h1 id=vfs-write其实是vfs-write的缩写>vfs.write其实是vfs_write的缩写</h1><p>➜ sudo stap -L &lsquo;kernel.function(&ldquo;sys_write&rdquo;)&rsquo;
 kernel.function(&ldquo;SyS_write@fs/read_write.c:584&rdquo;) $fd:long int $buf:long int $count:long int $ret:long int</p><p>源码路径/usr/src/debug/kernel-3.10.0-862.11.6.el7/linux-3.10.0-862.11.6.el7.x86_64/fs/read_write.c
-```</p><p><div align=center><img src=/img/file_system.png alt="file system"></p></div><div class=post-copyright><p class=copyright-item><span class=item-title>文章作者</span>
+```</p><p><center><img src=/img/file_system.png alt="file system"></center></p></div><div class=post-copyright><p class=copyright-item><span class=item-title>文章作者</span>
 <span class=item-content>None</span></p><p class=copyright-item><span class=item-title>上次更新</span>
 <span class=item-content>2020-03-15</span></p><p class=copyright-item><span class=item-title>许可协议</span>
 <span class=item-content><a rel="license noopener" href=#https://creativecommons.org/licenses/by-nc-nd/4.0/ target=_blank>CC BY-NC-ND 4.0</a></span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/development/>Development</a>

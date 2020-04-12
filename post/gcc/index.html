@@ -1,0 +1,538 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>gcc重要编译选项 - Even - A super concise theme for Hugo</title><meta name=renderer content=webkit><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content=no-transform><meta http-equiv=cache-control content=no-siteapp><meta name=theme-color content=#f8f5ec><meta name=msapplication-navbutton-color content=#f8f5ec><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-status-bar-style content=#f8f5ec><meta name=author content=None><meta name=description content="gcc编译流程 gcc编译器在编译一个C语言程序时需要经过以下4步： 将C语言源程序预处理，生成.i文件; 预处理后的.i文件编译成为汇编语言，生"><meta name=keywords content=Hugo,theme,even><meta name=generator content="Hugo 0.55.6 with theme even"><link rel=canonical href=http://localhost:1313/post/gcc/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><link href=/dist/even.c2a46f00.min.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property=og:title content=gcc重要编译选项><meta property=og:description content="gcc编译流程 gcc编译器在编译一个C语言程序时需要经过以下4步： 将C语言源程序预处理，生成.i文件; 预处理后的.i文件编译成为汇编语言，生"><meta property=og:type content=article><meta property=og:url content=http://localhost:1313/post/gcc/><meta property=article:published_time content=2020-04-11T19:10:45&#43;08:00><meta property=article:modified_time content=2020-04-11T19:10:45&#43;08:00><meta itemprop=name content=gcc重要编译选项><meta itemprop=description content="gcc编译流程 gcc编译器在编译一个C语言程序时需要经过以下4步： 将C语言源程序预处理，生成.i文件; 预处理后的.i文件编译成为汇编语言，生"><meta itemprop=datePublished content=2020-04-11T19:10:45&#43;08:00><meta itemprop=dateModified content=2020-04-11T19:10:45&#43;08:00><meta itemprop=wordCount content=2940><meta itemprop=keywords content=Development,GCC,><meta name=twitter:card content=summary><meta name=twitter:title content=gcc重要编译选项><meta name=twitter:description content="gcc编译流程 gcc编译器在编译一个C语言程序时需要经过以下4步： 将C语言源程序预处理，生成.i文件; 预处理后的.i文件编译成为汇编语言，生"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>None的学习笔记</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>主页</li></a><a href=/post/><li class=mobile-menu-item>归档</li></a><a href=/tags/><li class=mobile-menu-item>标签</li></a><a href=/categories/><li class=mobile-menu-item>分类</li></a><a href=/series/><li class=mobile-menu-item>系列</li></a><a href=/about/><li class=mobile-menu-item>关于</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>None的学习笔记</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>主页</a></li><li class=menu-item><a class=menu-item-link href=/post/>归档</a></li><li class=menu-item><a class=menu-item-link href=/tags/>标签</a></li><li class=menu-item><a class=menu-item-link href=/categories/>分类</a></li><li class=menu-item><a class=menu-item-link href=/series/>系列</a></li><li class=menu-item><a class=menu-item-link href=/about/>关于</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>gcc重要编译选项</h1><div class=post-meta><span class=post-time>2020-04-11</span><div class=post-category><a href=/categories/development/>Development</a>
+<a href=/categories/gcc/>GCC</a></div><span id=busuanzi_container_page_pv class=more-meta><span id=busuanzi_value_page_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次阅读</span></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>文章目录</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><ul><li><a href=#gcc编译流程>gcc编译流程</a></li><li><a href=#gcc的帮助信息>gcc的帮助信息</a></li><li><a href=#重要的gcc编译选项>重要的gcc编译选项</a><ul><li><a href=#gcc-v-选项><code>gcc -v</code>选项</a></li><li><a href=#gcc-wall-选项><code>gcc -Wall</code>选项</a></li><li><a href=#gcc-werror-选项><code>gcc -Werror</code>选项</a></li><li><a href=#gcc-e-选项><code>gcc -E</code>选项</a></li><li><a href=#gcc-s-选项><code>gcc -S</code>选项</a></li><li><a href=#gcc-ggdb3-选项><code>gcc -ggdb3</code>选项</a></li><li><a href=#gcc-d-选项><code>gcc -D</code>选项</a></li><li><a href=#gcc-u-选项><code>gcc -U</code>选项</a></li><li><a href=#gcc-o-选项><code>gcc -O</code>选项</a></li></ul></li></ul></li></ul></nav></div></div><div class=post-content><h2 id=gcc编译流程>gcc编译流程</h2><p><code>gcc</code>编译器在编译一个C语言程序时需要经过以下4步：</p><ul><li>将C语言源程序预处理，生成<code>.i</code>文件;</li><li>预处理后的<code>.i</code>文件编译成为汇编语言，生成<code>.s</code>文件;</li><li>将汇编语言文件经过汇编，生成目标文件<code>.o</code>文件;</li><li>将各个模块的<code>.o</code>文件链接起来生成一个可执行程序文件。</li></ul><h2 id=gcc的帮助信息>gcc的帮助信息</h2><p>我们可以使用<code>gcc --help</code>查看<code>gcc</code>的帮助信息：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=n>gcc</span> <span class=o>--</span><span class=n>help</span>
+<span class=nl>Usage</span><span class=p>:</span> <span class=n>gcc</span><span class=o>-</span><span class=mf>4.9</span> <span class=p>[</span><span class=n>options</span><span class=p>]</span> <span class=n>file</span><span class=p>...</span>
+<span class=nl>Options</span><span class=p>:</span>
+    <span class=o>-</span><span class=n>pass</span><span class=o>-</span><span class=n>exit</span><span class=o>-</span><span class=n>codes</span>         <span class=n>Exit</span> <span class=n>with</span> <span class=n>highest</span> <span class=n>error</span> <span class=n>code</span> <span class=n>from</span> <span class=n>a</span> <span class=n>phase</span>
+    <span class=o>--</span><span class=n>help</span>                   <span class=n>Display</span> <span class=n>this</span> <span class=n>information</span>
+    <span class=o>--</span><span class=n>target</span><span class=o>-</span><span class=n>help</span>            <span class=n>Display</span> <span class=n>target</span> <span class=n>specific</span> <span class=n>command</span> <span class=n>line</span> <span class=n>options</span>
+    <span class=o>--</span><span class=n>help</span><span class=o>=</span><span class=p>{</span><span class=n>common</span><span class=o>|</span><span class=n>optimizers</span><span class=o>|</span><span class=n>params</span><span class=o>|</span><span class=n>target</span><span class=o>|</span><span class=n>warnings</span><span class=o>|</span><span class=p>[</span><span class=o>^</span><span class=p>]{</span><span class=n>joined</span><span class=o>|</span><span class=n>separate</span><span class=o>|</span><span class=n>undocumented</span><span class=p>}}[,...]</span>
+                             <span class=n>Display</span> <span class=n>specific</span> <span class=n>types</span> <span class=n>of</span> <span class=n>command</span> <span class=n>line</span> <span class=n>options</span>
+    <span class=o>-</span><span class=n>Wa</span><span class=p>,</span><span class=o>&lt;</span><span class=n>options</span><span class=o>&gt;</span>            <span class=n>Pass</span> <span class=n>comma</span><span class=o>-</span><span class=n>separated</span> <span class=o>&lt;</span><span class=n>options</span><span class=o>&gt;</span> <span class=n>on</span> <span class=n>to</span> <span class=n>the</span> <span class=n>assembler</span>
+    <span class=o>-</span><span class=n>Wp</span><span class=p>,</span><span class=o>&lt;</span><span class=n>options</span><span class=o>&gt;</span>            <span class=n>Pass</span> <span class=n>comma</span><span class=o>-</span><span class=n>separated</span> <span class=o>&lt;</span><span class=n>options</span><span class=o>&gt;</span> <span class=n>on</span> <span class=n>to</span> <span class=n>the</span> <span class=n>preprocessor</span>
+    <span class=o>-</span><span class=n>Wl</span><span class=p>,</span><span class=o>&lt;</span><span class=n>options</span><span class=o>&gt;</span>            <span class=n>Pass</span> <span class=n>comma</span><span class=o>-</span><span class=n>separated</span> <span class=o>&lt;</span><span class=n>options</span><span class=o>&gt;</span> <span class=n>on</span> <span class=n>to</span> <span class=n>the</span> <span class=n>linker</span>
+    <span class=o>-</span><span class=n>Xassembler</span> <span class=o>&lt;</span><span class=n>arg</span><span class=o>&gt;</span>        <span class=n>Pass</span> <span class=o>&lt;</span><span class=n>arg</span><span class=o>&gt;</span> <span class=n>on</span> <span class=n>to</span> <span class=n>the</span> <span class=n>assembler</span>
+    <span class=o>-</span><span class=n>Xpreprocessor</span> <span class=o>&lt;</span><span class=n>arg</span><span class=o>&gt;</span>     <span class=n>Pass</span> <span class=o>&lt;</span><span class=n>arg</span><span class=o>&gt;</span> <span class=n>on</span> <span class=n>to</span> <span class=n>the</span> <span class=n>preprocessor</span>
+    <span class=o>-</span><span class=n>pipe</span>                    <span class=n>Use</span> <span class=n>pipes</span> <span class=n>rather</span> <span class=n>than</span> <span class=n>intermediate</span> <span class=n>files</span>
+    <span class=o>-</span><span class=n>time</span>                    <span class=n>Time</span> <span class=n>the</span> <span class=n>execution</span> <span class=n>of</span> <span class=n>each</span> <span class=n>subprocess</span>
+    <span class=o>-</span><span class=n>specs</span><span class=o>=&lt;</span><span class=n>file</span><span class=o>&gt;</span>            <span class=n>Override</span> <span class=n>built</span><span class=o>-</span><span class=n>in</span> <span class=n>specs</span> <span class=n>with</span> <span class=n>the</span> <span class=n>contents</span> <span class=n>of</span> <span class=o>&lt;</span><span class=n>file</span><span class=o>&gt;</span>
+    <span class=o>-</span><span class=n>std</span><span class=o>=&lt;</span><span class=n>standard</span><span class=o>&gt;</span>          <span class=n>Assume</span> <span class=n>that</span> <span class=n>the</span> <span class=n>input</span> <span class=n>sources</span> <span class=n>are</span> <span class=k>for</span> <span class=o>&lt;</span><span class=n>standard</span><span class=o>&gt;</span>
+    <span class=o>--</span><span class=n>sysroot</span><span class=o>=&lt;</span><span class=n>directory</span><span class=o>&gt;</span>    <span class=n>Use</span> <span class=o>&lt;</span><span class=n>directory</span><span class=o>&gt;</span> <span class=n>as</span> <span class=n>the</span> <span class=n>root</span> <span class=n>directory</span> <span class=k>for</span> <span class=n>headers</span>
+                             <span class=n>and</span> <span class=n>libraries</span>
+    <span class=p>......</span>                   <span class=p>......</span>
+
+    <span class=o>-</span><span class=n>B</span> <span class=o>&lt;</span><span class=n>directory</span><span class=o>&gt;</span>           <span class=n>Add</span> <span class=o>&lt;</span><span class=n>directory</span><span class=o>&gt;</span> <span class=n>to</span> <span class=n>the</span> <span class=n>compiler</span><span class=err>&#39;</span><span class=n>s</span> <span class=n>search</span> <span class=n>paths</span>
+    <span class=o>-</span><span class=n>v</span>                       <span class=n>Display</span> <span class=n>the</span> <span class=n>programs</span> <span class=n>invoked</span> <span class=n>by</span> <span class=n>the</span> <span class=n>compiler</span>
+    <span class=o>-</span><span class=cp>###                     Like -v but options quoted and commands not executed
+</span><span class=cp></span>    <span class=o>-</span><span class=n>E</span>                       <span class=n>Preprocess</span> <span class=n>only</span><span class=p>;</span> <span class=k>do</span> <span class=n>not</span> <span class=n>compile</span><span class=p>,</span> <span class=n>assemble</span> <span class=n>or</span> <span class=n>link</span>
+    <span class=o>-</span><span class=n>S</span>                       <span class=n>Compile</span> <span class=n>only</span><span class=p>;</span> <span class=k>do</span> <span class=n>not</span> <span class=n>assemble</span> <span class=n>or</span> <span class=n>link</span>
+    <span class=o>-</span><span class=n>c</span>                       <span class=n>Compile</span> <span class=n>and</span> <span class=n>assemble</span><span class=p>,</span> <span class=n>but</span> <span class=k>do</span> <span class=n>not</span> <span class=n>link</span>
+    <span class=o>-</span><span class=n>o</span> <span class=o>&lt;</span><span class=n>file</span><span class=o>&gt;</span>                <span class=n>Place</span> <span class=n>the</span> <span class=n>output</span> <span class=n>into</span> <span class=o>&lt;</span><span class=n>file</span><span class=o>&gt;</span>
+    <span class=o>-</span><span class=n>pie</span>                     <span class=n>Create</span> <span class=n>a</span> <span class=n>position</span> <span class=n>independent</span> <span class=n>executable</span>
+    <span class=o>-</span><span class=n>shared</span>                  <span class=n>Create</span> <span class=n>a</span> <span class=n>shared</span> <span class=n>library</span>
+
+<span class=n>Options</span> <span class=n>starting</span> <span class=n>with</span> <span class=o>-</span><span class=n>g</span><span class=p>,</span> <span class=o>-</span><span class=n>f</span><span class=p>,</span> <span class=o>-</span><span class=n>m</span><span class=p>,</span> <span class=o>-</span><span class=n>O</span><span class=p>,</span> <span class=o>-</span><span class=n>W</span><span class=p>,</span> <span class=n>or</span> <span class=o>--</span><span class=n>param</span> <span class=n>are</span> <span class=n>automatically</span>
+ <span class=n>passed</span> <span class=n>on</span> <span class=n>to</span> <span class=n>the</span> <span class=n>various</span> <span class=n>sub</span><span class=o>-</span><span class=n>processes</span> <span class=n>invoked</span> <span class=n>by</span> <span class=n>gcc</span><span class=o>-</span><span class=mf>4.9</span><span class=p>.</span>  <span class=n>In</span> <span class=n>order</span> <span class=n>to</span> <span class=n>pass</span>
+ <span class=n>other</span> <span class=n>options</span> <span class=n>on</span> <span class=n>to</span> <span class=n>these</span> <span class=n>processes</span> <span class=n>the</span> <span class=o>-</span><span class=n>W</span><span class=o>&lt;</span><span class=n>letter</span><span class=o>&gt;</span> <span class=n>options</span> <span class=n>must</span> <span class=n>be</span> <span class=n>used</span><span class=p>.</span></code></pre></td></tr></table></div></div><h2 id=重要的gcc编译选项>重要的gcc编译选项</h2><h3 id=gcc-v-选项><code>gcc -v</code>选项</h3><p>我们可以使用<code>gcc -v</code>参数查看编译过程中的的一些详细信息</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>v</span> <span class=o>-</span><span class=n>DDEBUG</span> <span class=n>gdb_finish</span><span class=p>.</span><span class=n>c</span> <span class=o>-</span><span class=n>std</span><span class=o>=</span><span class=n>c99</span>
+<span class=n>Using</span> <span class=n>built</span><span class=o>-</span><span class=n>in</span> <span class=n>specs</span><span class=p>.</span>
+<span class=n>COLLECT_GCC</span><span class=o>=/</span><span class=n>usr</span><span class=o>/</span><span class=n>local</span><span class=o>/</span><span class=n>Cellar</span><span class=o>/</span><span class=n>gcc49</span><span class=o>/</span><span class=mf>4.9.3</span><span class=o>/</span><span class=n>bin</span><span class=o>/</span><span class=n>gcc</span><span class=o>-</span><span class=mf>4.9</span>
+<span class=n>COLLECT_LTO_WRAPPER</span><span class=o>=/</span><span class=n>usr</span><span class=o>/</span><span class=n>local</span><span class=o>/</span><span class=n>Cellar</span><span class=o>/</span><span class=n>gcc</span><span class=err>@</span><span class=mf>4.9</span><span class=o>/</span><span class=mf>4.9.3</span><span class=o>/</span><span class=n>bin</span><span class=o>/</span><span class=p>..</span><span class=o>/</span><span class=n>libexec</span><span class=o>/</span><span class=n>gcc</span><span class=o>/</span><span class=n>x86_64</span><span class=o>-</span><span class=n>apple</span><span class=o>-</span><span class=n>darwin15</span><span class=mf>.2.0</span><span class=o>/</span><span class=mf>4.9.3</span><span class=o>/</span><span class=n>lto</span><span class=o>-</span><span class=n>wrapper</span>
+<span class=nl>Target</span><span class=p>:</span> <span class=n>x86_64</span><span class=o>-</span><span class=n>apple</span><span class=o>-</span><span class=n>darwin15</span><span class=mf>.2.0</span>
+<span class=n>Configured</span> <span class=nl>with</span><span class=p>:</span> <span class=p>..</span><span class=o>/</span><span class=n>configure</span> <span class=o>--</span><span class=n>build</span><span class=o>=</span><span class=n>x86_64</span><span class=o>-</span><span class=n>apple</span><span class=o>-</span><span class=n>darwin15</span><span class=mf>.2.0</span>
+                 <span class=o>--</span><span class=n>prefix</span><span class=o>=/</span><span class=n>usr</span><span class=o>/</span><span class=n>local</span><span class=o>/</span><span class=n>Cellar</span><span class=o>/</span><span class=n>gcc49</span><span class=o>/</span><span class=mf>4.9.3</span>
+                 <span class=o>--</span><span class=n>libdir</span><span class=o>=/</span><span class=n>usr</span><span class=o>/</span><span class=n>local</span><span class=o>/</span><span class=n>Cellar</span><span class=o>/</span><span class=n>gcc49</span><span class=o>/</span><span class=mf>4.9.3</span><span class=o>/</span><span class=n>lib</span><span class=o>/</span><span class=n>gcc</span><span class=o>/</span><span class=mf>4.9</span>
+                 <span class=o>--</span><span class=n>enable</span><span class=o>-</span><span class=n>languages</span><span class=o>=</span><span class=n>c</span><span class=p>,</span><span class=n>c</span><span class=o>++</span><span class=p>,</span><span class=n>objc</span><span class=p>,</span><span class=n>obj</span><span class=o>-</span><span class=n>c</span><span class=o>++</span>
+                 <span class=o>--</span><span class=n>program</span><span class=o>-</span><span class=n>suffix</span><span class=o>=-</span><span class=mf>4.9</span>
+                  <span class=p>......</span>
+                 <span class=o>--</span><span class=n>enable</span><span class=o>-</span><span class=n>stage1</span><span class=o>-</span><span class=n>checking</span>
+                 <span class=o>--</span><span class=n>enable</span><span class=o>-</span><span class=n>checking</span><span class=o>=</span><span class=n>release</span>
+                 <span class=o>--</span><span class=n>with</span><span class=o>-</span><span class=n>build</span><span class=o>-</span><span class=n>config</span><span class=o>=</span><span class=n>bootstrap</span><span class=o>-</span><span class=n>debug</span>
+                 <span class=o>--</span><span class=n>disable</span><span class=o>-</span><span class=n>werror</span>
+                 <span class=o>--</span><span class=n>with</span><span class=o>-</span><span class=n>pkgversion</span><span class=o>=</span><span class=err>&#39;</span><span class=n>Homebrew</span> <span class=n>gcc49</span> <span class=mf>4.9.3</span><span class=err>&#39;</span>
+<span class=n>Thread</span> <span class=nl>model</span><span class=p>:</span> <span class=n>posix</span>
+<span class=n>gcc</span> <span class=n>version</span> <span class=mf>4.9.3</span> <span class=p>(</span><span class=n>Homebrew</span> <span class=n>gcc49</span> <span class=mf>4.9.3</span><span class=p>)</span>
+    <span class=n>COLLECT_GCC_OPTIONS</span><span class=o>=</span><span class=err>&#39;</span><span class=o>-</span><span class=n>mmacosx</span><span class=o>-</span><span class=n>version</span><span class=o>-</span><span class=n>min</span><span class=o>=</span><span class=mf>10.12.7</span><span class=sc>&#39; &#39;</span><span class=o>-</span><span class=n>v</span><span class=sc>&#39; &#39;</span><span class=o>-</span><span class=n>D</span><span class=sc>&#39; &#39;</span><span class=n>DEBUG</span><span class=sc>&#39; &#39;</span><span class=o>-</span><span class=n>std</span><span class=o>=</span><span class=n>c99</span><span class=sc>&#39; &#39;</span><span class=o>-</span><span class=n>mtune</span><span class=o>=</span><span class=n>core2</span><span class=err>&#39;</span>
+    <span class=n>GGC</span> <span class=nl>heuristics</span><span class=p>:</span> <span class=o>--</span><span class=n>param</span> <span class=n>ggc</span><span class=o>-</span><span class=n>min</span><span class=o>-</span><span class=n>expand</span><span class=o>=</span><span class=mi>100</span> <span class=o>--</span><span class=n>param</span> <span class=n>ggc</span><span class=o>-</span><span class=n>min</span><span class=o>-</span><span class=n>heapsize</span><span class=o>=</span><span class=mi>131072</span>
+
+<span class=cp>#include</span> <span class=cpf>&#34;...&#34; search starts here:</span><span class=cp>
+</span><span class=cp>#include</span> <span class=cpf>&lt;...&gt; search starts here:</span><span class=cp>
+</span><span class=cp></span>    <span class=o>/</span><span class=n>usr</span><span class=o>/</span><span class=n>local</span><span class=o>/</span><span class=n>Cellar</span><span class=o>/</span><span class=n>gcc</span><span class=err>@</span><span class=mf>4.9</span><span class=o>/</span><span class=mf>4.9.3</span><span class=o>/</span><span class=n>bin</span><span class=o>/</span><span class=p>..</span><span class=o>/</span><span class=n>lib</span><span class=o>/</span><span class=n>gcc</span><span class=o>/</span><span class=mf>4.9</span><span class=o>/</span><span class=n>gcc</span><span class=o>/</span><span class=n>x86_64</span><span class=o>-</span><span class=n>apple</span><span class=o>-</span><span class=n>darwin15</span><span class=mf>.2.0</span><span class=o>/</span><span class=mf>4.9.3</span><span class=o>/</span><span class=n>include</span>
+    <span class=o>/</span><span class=n>usr</span><span class=o>/</span><span class=n>local</span><span class=o>/</span><span class=n>Cellar</span><span class=o>/</span><span class=n>gcc</span><span class=err>@</span><span class=mf>4.9</span><span class=o>/</span><span class=mf>4.9.3</span><span class=o>/</span><span class=n>bin</span><span class=o>/</span><span class=p>..</span><span class=o>/</span><span class=n>lib</span><span class=o>/</span><span class=n>gcc</span><span class=o>/</span><span class=mf>4.9</span><span class=o>/</span><span class=n>gcc</span><span class=o>/</span><span class=n>x86_64</span><span class=o>-</span><span class=n>apple</span><span class=o>-</span><span class=n>darwin15</span><span class=mf>.2.0</span><span class=o>/</span><span class=mf>4.9.3</span><span class=o>/</span><span class=n>include</span><span class=o>-</span><span class=n>fixed</span>
+    <span class=o>/</span><span class=n>usr</span><span class=o>/</span><span class=n>local</span><span class=o>/</span><span class=n>include</span>
+    <span class=o>/</span><span class=n>usr</span><span class=o>/</span><span class=n>local</span><span class=o>/</span><span class=n>Cellar</span><span class=o>/</span><span class=n>gcc</span><span class=err>@</span><span class=mf>4.9</span><span class=o>/</span><span class=mf>4.9.3</span><span class=o>/</span><span class=n>bin</span><span class=o>/</span><span class=p>..</span><span class=o>/</span><span class=n>lib</span><span class=o>/</span><span class=n>gcc</span><span class=o>/</span><span class=mf>4.9</span><span class=o>/</span><span class=n>gcc</span><span class=o>/</span><span class=p>..</span><span class=o>/</span><span class=p>..</span><span class=o>/</span><span class=p>..</span><span class=o>/</span><span class=p>..</span><span class=o>/</span><span class=n>include</span>
+    <span class=o>/</span><span class=n>usr</span><span class=o>/</span><span class=n>include</span>
+    <span class=o>/</span><span class=n>System</span><span class=o>/</span><span class=n>Library</span><span class=o>/</span><span class=n>Frameworks</span>
+    <span class=o>/</span><span class=n>Library</span><span class=o>/</span><span class=n>Frameworks</span>
+    
+    <span class=n>as</span> <span class=o>-</span><span class=n>arch</span> <span class=n>x86_64</span> <span class=o>-</span><span class=n>force_cpusubtype_ALL</span> <span class=o>-</span><span class=n>o</span> <span class=o>/</span><span class=n>var</span><span class=o>/</span><span class=n>folders</span><span class=o>/</span><span class=n>yz</span><span class=o>/</span><span class=n>kwcrlzrn6yzdjy4_h_zfpqqc0000gn</span><span class=o>/</span><span class=n>T</span><span class=o>//</span><span class=n>ccHrUOR3</span><span class=p>.</span><span class=n>o</span> <span class=o>/</span><span class=n>var</span><span class=o>/</span><span class=n>folders</span><span class=o>/</span><span class=n>yz</span><span class=o>/</span><span class=n>kwcrlzrn6yzdjy4_h_zfpqqc0000gn</span><span class=o>/</span><span class=n>T</span><span class=o>//</span><span class=n>ccjNRfjo</span><span class=p>.</span><span class=n>s</span></code></pre></td></tr></table></div></div><p>通过<code>COLLECT_GCC_OPTIONS='-mmacosx-version-min=10.12.7' '-v' '-D' 'DEBUG' '-std=c99' '-mtune=core2</code>看出<code>gcc</code>会切分出编译参数；通过<code>#include</code>可以看出<code>gcc</code>的搜索头文件的路径。</p><h3 id=gcc-wall-选项><code>gcc -Wall</code>选项</h3><p>使用<code>man gcc</code>可以查看<code>-Wall</code>选项:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=o>-</span><span class=n>Wall</span>
+    <span class=n>This</span> <span class=n>enables</span> <span class=n>all</span> <span class=n>the</span> <span class=n>warnings</span> <span class=n>about</span> <span class=n>constructions</span> <span class=n>that</span> <span class=n>some</span> <span class=n>users</span> <span class=n>consider</span>
+    <span class=n>questionable</span><span class=p>,</span> <span class=n>and</span> <span class=n>that</span> <span class=n>are</span> <span class=n>easy</span> <span class=n>to</span> <span class=n>avoid</span> <span class=p>(</span><span class=n>or</span> <span class=n>modify</span> <span class=n>to</span> <span class=n>prevent</span> <span class=n>the</span> <span class=n>warning</span><span class=p>),</span> <span class=n>even</span> <span class=n>in</span>
+    <span class=n>conjunction</span> <span class=n>with</span> <span class=n>macros</span><span class=p>.</span>  <span class=n>This</span> <span class=n>also</span> <span class=n>enables</span> <span class=n>some</span> <span class=n>language</span><span class=o>-</span><span class=n>specific</span> <span class=n>warnings</span>
+    <span class=n>described</span> <span class=n>in</span> <span class=n>C</span><span class=o>++</span> <span class=n>Dialect</span> <span class=n>Options</span> <span class=n>and</span> <span class=n>Objective</span><span class=o>-</span><span class=n>C</span> <span class=n>and</span> <span class=n>Objective</span><span class=o>-</span><span class=n>C</span><span class=o>++</span> <span class=n>Dialect</span> <span class=n>Options</span><span class=p>.</span>
+
+    <span class=o>-</span><span class=n>Wall</span> <span class=n>turns</span> <span class=n>on</span> <span class=n>the</span> <span class=n>following</span> <span class=n>warning</span> <span class=nl>flags</span><span class=p>:</span>
+        <span class=o>-</span><span class=n>Waddress</span>
+        <span class=o>-</span><span class=n>Warray</span><span class=o>-</span><span class=n>bounds</span><span class=o>=</span><span class=mi>1</span> <span class=p>(</span><span class=n>only</span> <span class=n>with</span> <span class=o>-</span><span class=n>O2</span><span class=p>)</span>
+        <span class=o>-</span><span class=n>Wformat</span>
+        <span class=o>-</span><span class=n>Wimplicit</span><span class=o>-</span><span class=kt>int</span>
+        <span class=o>-</span><span class=n>Wimplicit</span><span class=o>-</span><span class=n>function</span><span class=o>-</span><span class=n>declaration</span>
+        <span class=o>-</span><span class=n>Wunknown</span><span class=o>-</span><span class=n>pragmas</span>
+        <span class=o>-</span><span class=n>Wunused</span><span class=o>-</span><span class=n>function</span>
+        <span class=p>......</span>
+        <span class=o>-</span><span class=n>Wunused</span><span class=o>-</span><span class=n>label</span>
+        <span class=o>-</span><span class=n>Wunused</span><span class=o>-</span><span class=n>value</span>
+        <span class=o>-</span><span class=n>Wunused</span><span class=o>-</span><span class=n>variable</span>
+
+    <span class=n>Note</span> <span class=n>that</span> <span class=n>some</span> <span class=n>warning</span> <span class=n>flags</span> <span class=n>are</span> <span class=n>not</span> <span class=n>implied</span> <span class=n>by</span> <span class=o>-</span><span class=n>Wall</span><span class=p>.</span>  <span class=n>Some</span> <span class=n>of</span> <span class=n>them</span> <span class=n>warn</span> <span class=n>about</span>
+    <span class=n>constructions</span> <span class=n>that</span> <span class=n>users</span> <span class=n>generally</span> <span class=k>do</span> <span class=n>not</span> <span class=n>consider</span> <span class=n>questionable</span><span class=p>,</span> <span class=n>but</span> <span class=n>which</span>
+    <span class=n>occasionally</span> <span class=n>you</span> <span class=n>might</span> <span class=n>wish</span> <span class=n>to</span> <span class=n>check</span> <span class=k>for</span><span class=p>;</span> <span class=n>others</span> <span class=n>warn</span> <span class=n>about</span> <span class=n>constructions</span> <span class=n>that</span> <span class=n>are</span>
+    <span class=n>necessary</span> <span class=n>or</span> <span class=n>hard</span> <span class=n>to</span> <span class=n>avoid</span> <span class=n>in</span> <span class=n>some</span> <span class=n>cases</span><span class=p>,</span> <span class=n>and</span> <span class=n>there</span> <span class=n>is</span> <span class=n>no</span> <span class=n>simple</span> <span class=n>way</span> <span class=n>to</span> <span class=n>modify</span> <span class=n>the</span>
+    <span class=n>code</span> <span class=n>to</span> <span class=n>suppress</span> <span class=n>the</span> <span class=n>warning</span><span class=p>.</span> <span class=n>Some</span> <span class=n>of</span> <span class=n>them</span> <span class=n>are</span> <span class=n>enabled</span> <span class=n>by</span> <span class=o>-</span><span class=n>Wextra</span> <span class=n>but</span> <span class=n>many</span> <span class=n>of</span> <span class=n>them</span>
+    <span class=n>must</span> <span class=n>be</span> <span class=n>enabled</span> <span class=n>individually</span><span class=p>.</span></code></pre></td></tr></table></div></div><p>使用<code>gcc --help=warning</code>可以进一步查看<code>-Wall</code>选项:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=err>$</span> <span class=n>gcc</span> <span class=o>--</span><span class=n>help</span><span class=o>=</span><span class=n>warning</span>
+<span class=n>The</span> <span class=n>following</span> <span class=n>options</span> <span class=n>control</span> <span class=n>compiler</span> <span class=n>warning</span> <span class=nl>messages</span><span class=p>:</span>
+    <span class=o>-</span><span class=n>Wabi</span>                       <span class=n>Warn</span> <span class=n>about</span> <span class=n>things</span> <span class=n>that</span> <span class=n>will</span> <span class=n>change</span> <span class=n>when</span> <span class=n>compiling</span>
+                                <span class=n>with</span> <span class=n>an</span> <span class=n>ABI</span><span class=o>-</span><span class=n>compliant</span> <span class=n>compiler</span>
+    <span class=o>-</span><span class=n>Wabi</span><span class=o>-</span><span class=n>tag</span>                   <span class=n>Warn</span> <span class=k>if</span> <span class=n>a</span> <span class=n>subobject</span> <span class=n>has</span> <span class=n>an</span> <span class=n>abi_tag</span> <span class=n>attribute</span> <span class=n>that</span>
+                                <span class=n>the</span> <span class=n>complete</span> <span class=n>object</span> <span class=n>type</span> <span class=n>does</span> <span class=n>not</span> <span class=n>have</span>
+    <span class=o>-</span><span class=n>Waddress</span>                   <span class=n>Warn</span> <span class=n>about</span> <span class=n>suspicious</span> <span class=n>uses</span> <span class=n>of</span> <span class=n>memory</span> <span class=n>addresses</span>
+    <span class=o>-</span><span class=n>Waggregate</span><span class=o>-</span><span class=k>return</span>          <span class=n>Warn</span> <span class=n>about</span> <span class=n>returning</span> <span class=n>structures</span><span class=p>,</span> <span class=n>unions</span> <span class=n>or</span> <span class=n>arrays</span>
+    <span class=o>-</span><span class=n>Waliasing</span>                  <span class=n>Warn</span> <span class=n>about</span> <span class=n>possible</span> <span class=n>aliasing</span> <span class=n>of</span> <span class=n>dummy</span> <span class=n>arguments</span>
+    <span class=o>-</span><span class=n>Walign</span><span class=o>-</span><span class=n>commons</span>             <span class=n>Warn</span> <span class=n>about</span> <span class=n>alignment</span> <span class=n>of</span> <span class=n>COMMON</span> <span class=n>blocks</span>
+    <span class=o>-</span><span class=n>Wall</span>                       <span class=n>Enable</span> <span class=n>most</span> <span class=n>warning</span> <span class=n>messages</span>
+    <span class=p>......</span>
+    <span class=o>-</span><span class=n>Warray</span><span class=o>-</span><span class=n>bounds</span>              <span class=n>Warn</span> <span class=k>if</span> <span class=n>an</span> <span class=n>array</span> <span class=n>is</span> <span class=n>accessed</span> <span class=n>out</span> <span class=n>of</span> <span class=n>bounds</span>
+    <span class=o>-</span><span class=n>Wunused</span><span class=o>-</span><span class=n>value</span>              <span class=n>Warn</span> <span class=n>when</span> <span class=n>an</span> <span class=n>expression</span> <span class=n>value</span> <span class=n>is</span> <span class=n>unused</span>
+    <span class=o>-</span><span class=n>Wunused</span><span class=o>-</span><span class=n>variable</span>           <span class=n>Warn</span> <span class=n>when</span> <span class=n>a</span> <span class=n>variable</span> <span class=n>is</span> <span class=n>unused</span></code></pre></td></tr></table></div></div><p>需要注意的是，各警告选项既然能使之生效，当然也能使之关闭。比如假设我们想要使用-Wall来启用个选项，同时又要关闭unused警告，可以通过新增类似<code>Wno-*</code>的选项来达到目的:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=err>$</span> <span class=n>cat</span> <span class=n>gcc_warning</span><span class=p>.</span><span class=n>c</span>
+<span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span><span class=cp>#include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=kt>int</span> <span class=n>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=kt>char</span> <span class=n>ch</span> <span class=o>=</span> <span class=sc>&#39;a&#39;</span><span class=p>;</span>
+    <span class=kt>int</span> <span class=n>num</span> <span class=o>=</span> <span class=mi>2028</span><span class=p>;</span>
+
+    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;num = %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>num</span><span class=p>);</span>
+    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>g</span> <span class=o>-</span><span class=n>Wall</span> <span class=n>gcc_warning</span><span class=p>.</span><span class=n>c</span> <span class=o>-</span><span class=n>o</span> <span class=n>gcc_warning</span>
+<span class=n>gcc_warning</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span> <span class=n>In</span> <span class=n>function</span> <span class=err>&#39;</span><span class=n>main</span><span class=err>&#39;</span><span class=o>:</span>
+<span class=n>gcc_warning</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>5</span><span class=o>:</span><span class=mi>10</span><span class=o>:</span> <span class=nl>warning</span><span class=p>:</span> <span class=n>unused</span> <span class=n>variable</span> <span class=err>&#39;</span><span class=n>ch</span><span class=err>&#39;</span> <span class=p>[</span><span class=o>-</span><span class=n>Wunused</span><span class=o>-</span><span class=n>variable</span><span class=p>]</span>
+     <span class=kt>char</span> <span class=n>ch</span> <span class=o>=</span> <span class=sc>&#39;a&#39;</span><span class=p>;</span>
+          <span class=o>^</span>
+
+<span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>g</span> <span class=o>-</span><span class=n>Wall</span> <span class=o>-</span><span class=n>Wno</span><span class=o>-</span><span class=n>unused</span> <span class=n>gcc_warning</span><span class=p>.</span><span class=n>c</span> <span class=o>-</span><span class=n>o</span> <span class=n>gcc_warning</span></code></pre></td></tr></table></div></div><h3 id=gcc-werror-选项><code>gcc -Werror</code>选项</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c>    <span class=o>-</span><span class=n>Werror</span>
+        <span class=n>Make</span> <span class=n>all</span> <span class=n>warnings</span> <span class=n>into</span> <span class=n>errors</span><span class=p>.</span></code></pre></td></tr></table></div></div><p>例如上述的程序新增<code>-Werror</code>编译选项：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>Wall</span> <span class=o>-</span><span class=n>Werror</span> <span class=n>gcc_warning</span><span class=p>.</span><span class=n>c</span>
+<span class=n>gcc_warning</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span> <span class=n>In</span> <span class=n>function</span> <span class=err>&#39;</span><span class=n>main</span><span class=err>&#39;</span><span class=o>:</span>
+<span class=n>gcc_warning</span><span class=p>.</span><span class=nl>c</span><span class=p>:</span><span class=mi>5</span><span class=o>:</span><span class=mi>10</span><span class=o>:</span> <span class=nl>error</span><span class=p>:</span> <span class=n>unused</span> <span class=n>variable</span> <span class=err>&#39;</span><span class=n>ch</span><span class=err>&#39;</span> <span class=p>[</span><span class=o>-</span><span class=n>Werror</span><span class=o>=</span><span class=n>unused</span><span class=o>-</span><span class=n>variable</span><span class=p>]</span>
+     <span class=kt>char</span> <span class=n>ch</span> <span class=o>=</span> <span class=sc>&#39;a&#39;</span><span class=p>;</span>
+          <span class=o>^</span>
+<span class=nl>cc1</span><span class=p>:</span> <span class=n>all</span> <span class=n>warnings</span> <span class=n>being</span> <span class=n>treated</span> <span class=n>as</span> <span class=n>errors</span></code></pre></td></tr></table></div></div><h3 id=gcc-e-选项><code>gcc -E</code>选项</h3><p>C语言代码在交给编译器之前，会先由预处理器进行一些文本替换方面的操作，例如宏展开、文件包含、删除部分代码等。在正常的情况下,<code>gcc</code>不会保留预处理阶段的输出文件，也即<code>.i</code>文件。可以利用<code>-E</code>选项保留预处理器的输出文件，以用于诊断代码。<code>-E</code>选项指示gcc在预处理完毕之后即可停止。默认情况下，预处理器的输出会被导入到标准输出流。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>E</span> <span class=n>gcc_warning</span><span class=p>.</span><span class=n>c</span> <span class=o>-</span><span class=n>o</span> <span class=n>gcc_warning</span><span class=p>.</span><span class=n>i</span></code></pre></td></tr></table></div></div><p>因为头文件可能相当大，如果源文件包括了多个头文件，那么它的预处理器输出可能会庞杂难读。使用<code>-C</code>选项会很有帮助，这个选项可以阻止预处理器删除源文件和头文件中的注释：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><span class=lnt>1
+</span></pre></td><td class=lntd><pre class=chroma>gcc -E -C gcc_warning.c -o gcc_warning.i</pre></td></tr></table></div></div><h3 id=gcc-s-选项><code>gcc -S</code>选项</h3><p>通常情况下，<code>gcc</code>把汇编语言输出存储到临时文件中，并且在汇编器执行完后立刻删除它们。但是可以使用&rsquo;-S&rsquo;选项，让编译程序在生成汇编语言输出之后立刻停止。如果没有指定输出文件名，那么采用&rsquo;-S&rsquo;选项的编译过程会为每个被编译的输入文件生成以<code>.s</code>作为后缀的汇编语言文件。如下例所示：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>S</span> <span class=n>gcc_warning</span><span class=p>.</span><span class=n>c</span></code></pre></td></tr></table></div></div><p>如果想把C语言变量的名称作为汇编语言语句中的注释，可以加上<code>-fverbose-asm</code>选项:</p><p><strong>PS: 这个选项是非常有用，可以在学习<code>gcc</code>生成的汇编时辅助理解汇编代码。</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=o>-</span><span class=n>fverbose</span><span class=o>-</span><span class=k>asm</span>
+	<span class=n>Put</span> <span class=n>extra</span> <span class=n>commentary</span> <span class=n>information</span> <span class=n>in</span> <span class=n>the</span> <span class=n>generated</span> <span class=n>assembly</span> <span class=n>code</span> <span class=n>to</span> <span class=n>make</span> <span class=n>it</span> <span class=n>more</span>
+	<span class=n>readable</span><span class=p>.</span>  <span class=n>This</span> <span class=n>option</span> <span class=n>is</span> <span class=n>generally</span> <span class=n>only</span> <span class=n>of</span> <span class=n>use</span> <span class=n>to</span> <span class=n>those</span> <span class=n>who</span> <span class=n>actually</span> <span class=n>need</span> <span class=n>to</span> <span class=n>read</span>
+	<span class=n>the</span> <span class=n>generated</span> <span class=n>assembly</span> <span class=n>code</span> <span class=p>(</span><span class=n>perhaps</span> <span class=k>while</span> <span class=n>debugging</span> <span class=n>the</span> <span class=n>compiler</span> <span class=n>itself</span><span class=p>).</span>
+
+<span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>S</span> <span class=o>-</span><span class=n>fverbose</span><span class=o>-</span><span class=k>asm</span> <span class=n>gcc_warning</span><span class=p>.</span><span class=n>c</span>
+<span class=err>$</span> <span class=n>cat</span> <span class=n>gcc_warning</span><span class=p>.</span><span class=n>s</span>
+<span class=cp># GNU C (Homebrew gcc49 4.9.3) version 4.9.3 (x86_64-apple-darwin15.2.0)
+</span><span class=cp>#	compiled by GNU C version 4.9.3, GMP version 4.3.2, MPFR version 2.4.2, MPC version 0.8.1
+</span><span class=cp># GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+</span><span class=cp># options passed:
+</span><span class=cp># -iprefix /usr/local/Cellar/gcc@4.9/4.9.3/bin/../lib/gcc/4.9/gcc/x86_64-apple-darwin15.2.0/4.9.3/
+</span><span class=cp># -D__DYNAMIC__ gcc_warning.c -fPIC -mmacosx-version-min=10.12.7
+</span><span class=cp># -mtune=core2 -fverbose-asm
+</span><span class=cp># options enabled:  -Wnonportable-cfstrings -fPIC
+</span><span class=cp># -faggressive-loop-optimizations -fasynchronous-unwind-tables
+</span><span class=cp># -fauto-inc-dec -fcommon -fdelete-null-pointer-checks -fearly-inlining
+</span><span class=cp># -feliminate-unused-debug-types -ffunction-cse -fgcse-lm -fgnu-unique
+</span><span class=cp># -fident -finline-atomics -fira-hoist-pressure -fira-share-save-slots
+</span><span class=cp># -fira-share-spill-slots -fivopts -fkeep-static-consts
+</span><span class=cp># -fleading-underscore -flifetime-dse -fmath-errno -fmerge-debug-strings
+</span><span class=cp># -fnext-runtime -fobjc-abi-version= -fpeephole -fprefetch-loop-arrays
+</span><span class=cp># -freg-struct-return -fsched-critical-path-heuristic
+</span><span class=cp># -fsched-dep-count-heuristic -fsched-group-heuristic -fsched-interblock
+</span><span class=cp># -fsched-last-insn-heuristic -fsched-rank-heuristic -fsched-spec
+</span><span class=cp># -fsched-spec-insn-heuristic -fsched-stalled-insns-dep -fshow-column
+</span><span class=cp># -fsigned-zeros -fsplit-ivs-in-unroller -fstrict-volatile-bitfields
+</span><span class=cp># -fsync-libcalls -ftrapping-math -ftree-coalesce-vars -ftree-cselim
+</span><span class=cp># -ftree-forwprop -ftree-loop-if-convert -ftree-loop-im -ftree-loop-ivcanon
+</span><span class=cp># -ftree-loop-optimize -ftree-parallelize-loops= -ftree-phiprop
+</span><span class=cp># -ftree-reassoc -ftree-scev-cprop -funit-at-a-time -funwind-tables
+</span><span class=cp># -fverbose-asm -fzero-initialized-in-bss -gstrict-dwarf
+</span><span class=cp># -m128bit-long-double -m64 -m80387 -malign-stringops -matt-stubs
+</span><span class=cp># -mconstant-cfstrings -mfancy-math-387 -mfp-ret-in-387 -mfxsr -mieee-fp
+</span><span class=cp># -mlong-double-80 -mmmx -mno-sse4 -mpush-args -mred-zone -msse -msse2
+</span><span class=cp># -msse3
+</span><span class=cp></span>
+	<span class=p>.</span><span class=n>cstring</span>
+<span class=nl>LC0</span><span class=p>:</span>
+	<span class=p>.</span><span class=n>ascii</span> <span class=s>&#34;num = %d</span><span class=se>\12\0</span><span class=s>&#34;</span>
+	<span class=p>.</span><span class=n>text</span>
+	<span class=p>.</span><span class=n>globl</span> <span class=n>_main</span>
+<span class=nl>_main</span><span class=p>:</span>
+<span class=nl>LFB4</span><span class=p>:</span>
+	<span class=n>pushq</span>	<span class=o>%</span><span class=n>rbp</span>			<span class=cp>#
+</span><span class=cp></span><span class=nl>LCFI0</span><span class=p>:</span>
+	<span class=n>movq</span>	<span class=o>%</span><span class=n>rsp</span><span class=p>,</span> <span class=o>%</span><span class=n>rbp</span>		<span class=cp>#,
+</span><span class=cp># 汇编中的ch, num变量就是上文程序中的变量
+</span><span class=cp></span><span class=nl>LCFI1</span><span class=p>:</span>
+	<span class=n>subq</span>	<span class=err>$</span><span class=mi>16</span><span class=p>,</span> <span class=o>%</span><span class=n>rsp</span>		<span class=cp>#,
+</span><span class=cp></span>	<span class=n>movb</span>	<span class=err>$</span><span class=mi>97</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>(</span><span class=o>%</span><span class=n>rbp</span><span class=p>)</span>		<span class=cp>#, ch
+</span><span class=cp></span>	<span class=n>movl</span>	<span class=err>$</span><span class=mi>2028</span><span class=p>,</span> <span class=o>-</span><span class=mi>8</span><span class=p>(</span><span class=o>%</span><span class=n>rbp</span><span class=p>)</span>		<span class=cp>#, num
+</span><span class=cp></span>	<span class=n>movl</span>	<span class=o>-</span><span class=mi>8</span><span class=p>(</span><span class=o>%</span><span class=n>rbp</span><span class=p>),</span> <span class=o>%</span><span class=n>eax</span>		<span class=cp># num, tmp85
+</span><span class=cp></span>	<span class=n>movl</span>	<span class=o>%</span><span class=n>eax</span><span class=p>,</span> <span class=o>%</span><span class=n>esi</span>		<span class=cp># tmp85,
+</span><span class=cp></span>	<span class=n>leaq</span>	<span class=n>LC0</span><span class=p>(</span><span class=o>%</span><span class=n>rip</span><span class=p>),</span> <span class=o>%</span><span class=n>rdi</span>		<span class=cp>#,
+</span><span class=cp></span>	<span class=n>movl</span>	<span class=err>$</span><span class=mi>0</span><span class=p>,</span> <span class=o>%</span><span class=n>eax</span>		<span class=cp>#,
+</span><span class=cp></span>	<span class=n>call</span>	<span class=n>_printf</span>			<span class=cp>#
+</span><span class=cp></span>	<span class=n>movl</span>	<span class=err>$</span><span class=mi>0</span><span class=p>,</span> <span class=o>%</span><span class=n>eax</span>		<span class=cp>#, D.3126
+</span><span class=cp></span>	<span class=n>leave</span>
+<span class=nl>LCFI2</span><span class=p>:</span>
+	<span class=n>ret</span></code></pre></td></tr></table></div></div><h3 id=gcc-ggdb3-选项><code>gcc -ggdb3</code>选项</h3><p>通过<code>man gcc</code>查看<code>-ggdb</code>选项的用途:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c>    <span class=o>-</span><span class=n>ggdb</span>
+        <span class=n>Produce</span> <span class=n>debugging</span> <span class=n>information</span> <span class=k>for</span> <span class=n>use</span> <span class=n>by</span> <span class=n>GDB</span><span class=p>.</span>  <span class=n>This</span> <span class=n>means</span> <span class=n>to</span> <span class=n>use</span> <span class=n>the</span> <span class=n>most</span>
+        <span class=n>expressive</span> <span class=n>format</span> <span class=n>available</span> <span class=p>(</span><span class=n>DWARF</span><span class=p>,</span> <span class=n>stabs</span><span class=p>,</span> <span class=n>or</span> <span class=n>the</span> <span class=n>native</span> <span class=n>format</span> <span class=k>if</span> <span class=n>neither</span> <span class=n>of</span>
+        <span class=n>those</span> <span class=n>are</span> <span class=n>supported</span><span class=p>),</span> <span class=n>including</span> <span class=n>GDB</span> <span class=n>extensions</span> <span class=k>if</span> <span class=n>at</span> <span class=n>all</span> <span class=n>possible</span><span class=p>.</span>
+    <span class=o>-</span><span class=n>ggdblevel</span>
+        <span class=n>Request</span> <span class=n>debugging</span> <span class=n>information</span> <span class=n>and</span> <span class=n>also</span> <span class=n>use</span> <span class=n>level</span> <span class=n>to</span> <span class=n>specify</span> <span class=n>how</span> <span class=n>much</span>
+        <span class=n>information</span><span class=p>.</span>  <span class=n>The</span> <span class=k>default</span> <span class=n>level</span> <span class=n>is</span> <span class=mf>2.</span>
+
+        <span class=n>Level</span> <span class=mi>0</span> <span class=n>produces</span> <span class=n>no</span> <span class=n>debug</span> <span class=n>information</span> <span class=n>at</span> <span class=n>all</span><span class=p>.</span>  <span class=n>Thus</span><span class=p>,</span> <span class=o>-</span><span class=n>g0</span> <span class=n>negates</span> <span class=o>-</span><span class=n>g</span><span class=p>.</span>
+
+        <span class=n>Level</span> <span class=mi>1</span> <span class=n>produces</span> <span class=n>minimal</span> <span class=n>information</span><span class=p>,</span> <span class=n>enough</span> <span class=k>for</span> <span class=n>making</span> <span class=n>backtraces</span> <span class=n>in</span> <span class=n>parts</span> <span class=n>of</span>
+        <span class=n>the</span> <span class=n>program</span> <span class=n>that</span> <span class=n>you</span> <span class=n>don</span><span class=err>&#39;</span><span class=n>t</span> <span class=n>plan</span> <span class=n>to</span> <span class=n>debug</span><span class=p>.</span>  <span class=n>This</span> <span class=n>includes</span> <span class=n>descriptions</span> <span class=n>of</span>
+        <span class=n>functions</span> <span class=n>and</span> <span class=n>external</span> <span class=n>variables</span><span class=p>,</span> <span class=n>and</span> <span class=n>line</span> <span class=n>number</span> <span class=n>tables</span><span class=p>,</span> <span class=n>but</span> <span class=n>no</span> <span class=n>information</span>
+        <span class=n>about</span> <span class=n>local</span> <span class=n>variables</span><span class=p>.</span>
+
+        <span class=n>Level</span> <span class=mi>3</span> <span class=n>includes</span> <span class=n>extra</span> <span class=n>information</span><span class=p>,</span> <span class=n>such</span> <span class=n>as</span> <span class=n>all</span> <span class=n>the</span> <span class=n>macro</span> <span class=n>definitions</span> <span class=n>present</span>
+        <span class=n>in</span> <span class=n>the</span> <span class=n>program</span><span class=p>.</span>  <span class=n>Some</span> <span class=n>debuggers</span> <span class=n>support</span> <span class=n>macro</span> <span class=n>expansion</span> <span class=n>when</span> <span class=n>you</span> <span class=n>use</span> <span class=o>-</span><span class=n>g3</span><span class=p>.</span></code></pre></td></tr></table></div></div><p><strong>PS:后续建议在linux平台下使用<code>-ggdb3</code>替换<code>-g</code>选项。</strong></p><h3 id=gcc-d-选项><code>gcc -D</code>选项</h3><p>使用<code>gcc --help=separate</code>可以查看<code>-D</code>选项的含义：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c>  <span class=o>-</span><span class=n>D</span><span class=o>&lt;</span><span class=n>macro</span><span class=o>&gt;</span><span class=p>[</span><span class=o>=&lt;</span><span class=n>val</span><span class=o>&gt;</span><span class=p>]</span>           <span class=n>Define</span> <span class=n>a</span> <span class=o>&lt;</span><span class=n>macro</span><span class=o>&gt;</span> <span class=n>with</span> <span class=o>&lt;</span><span class=n>val</span><span class=o>&gt;</span> <span class=n>as</span> <span class=n>its</span> <span class=n>value</span><span class=p>.</span>  <span class=n>If</span>
+                              <span class=n>just</span> <span class=o>&lt;</span><span class=n>macro</span><span class=o>&gt;</span> <span class=n>is</span> <span class=n>given</span><span class=p>,</span> <span class=o>&lt;</span><span class=n>val</span><span class=o>&gt;</span> <span class=n>is</span> <span class=n>taken</span> <span class=n>to</span> <span class=n>be</span> <span class=mi>1</span></code></pre></td></tr></table></div></div><p><code>-D</code>选项是用来在使用<code>gcc/g++</code>编译的时候定义宏的。<code>gcc -DDEBUG</code>中的<code>-D</code>后面直接跟宏命，相当于定义这个宏，默认这个宏的内容是1。<code>gcc -DKEY=VALUE</code>表示定义<code>KEY</code>这个宏，它的内容是<code>VALUE</code>。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=err>$</span> <span class=n>cat</span> <span class=n>gcc_def_macro</span><span class=p>.</span><span class=n>c</span>
+<span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span><span class=cp>#include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=kt>int</span> <span class=n>main</span><span class=p>()</span> <span class=p>{</span>
+<span class=cp>#ifdef DEBUG
+</span><span class=cp></span>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Defined DEBUG(%d) macro</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>DEBUG</span><span class=p>);</span>
+<span class=cp>#else
+</span><span class=cp></span>    <span class=n>printf</span><span class=p>(</span><span class=s>&#34;Not defined DEBUG</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+<span class=cp>#endif
+</span><span class=cp></span>
+    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>ggdb3</span> <span class=o>-</span><span class=n>Wall</span> <span class=n>gcc_def_macro</span><span class=p>.</span><span class=n>c</span> <span class=o>-</span><span class=n>o</span> <span class=n>gcc_def_macro</span>
+<span class=err>$</span> <span class=p>.</span><span class=o>/</span><span class=n>gcc_def_macro</span>
+<span class=n>Not</span> <span class=n>defined</span> <span class=n>DEBUG</span>
+
+<span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>ggdb3</span> <span class=o>-</span><span class=n>Wall</span> <span class=o>-</span><span class=n>DDEBUG</span> <span class=n>gcc_def_macro</span><span class=p>.</span><span class=n>c</span> <span class=o>-</span><span class=n>o</span> <span class=n>gcc_def_macro</span>
+<span class=err>$</span> <span class=p>.</span><span class=o>/</span><span class=n>gcc_def_macro</span>
+<span class=n>Defined</span> <span class=n>DEBUG</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span> <span class=n>macro</span>
+
+<span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>ggdb3</span> <span class=o>-</span><span class=n>Wall</span> <span class=o>-</span><span class=n>DDEBUG</span><span class=o>=</span><span class=mi>128</span> <span class=n>gcc_def_macro</span><span class=p>.</span><span class=n>c</span> <span class=o>-</span><span class=n>o</span> <span class=n>gcc_def_macro</span>
+<span class=err>$</span> <span class=p>.</span><span class=o>/</span><span class=n>gcc_def_macro</span>
+<span class=n>Defined</span> <span class=n>DEBUG</span><span class=p>(</span><span class=mi>128</span><span class=p>)</span> <span class=n>macro</span></code></pre></td></tr></table></div></div><p>PS:<code>-Dprivate=public -Dprotected=public</code>可以用于测试环境，把<code>private</code>与<code>protected</code>全替换为<code>public</code>。比如我们使用<code>gtest</code>去写单元测试，直接测试目标类的成员函数，但是目标类的成员函它可能是<code>private</code>或者<code>protected</code>，所以我们使用这个宏把它们全变成<code>public</code>。</p><h3 id=gcc-u-选项><code>gcc -U</code>选项</h3><p><code>gcc -U</code>用于取消宏(用于取消使用<code>-D</code>选项定义的宏，而不是源码中定义的宏)。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=o>-</span><span class=n>U</span><span class=o>&lt;</span><span class=n>macro</span><span class=o>&gt;</span>                   <span class=n>Undefine</span> <span class=o>&lt;</span><span class=n>macro</span><span class=o>&gt;</span>
+
+<span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>ggdb3</span> <span class=o>-</span><span class=n>Wall</span> <span class=o>-</span><span class=n>DDEBUG</span><span class=o>=</span><span class=mi>512</span> <span class=n>gcc_def_macro</span><span class=p>.</span><span class=n>c</span> <span class=o>-</span><span class=n>o</span> <span class=n>gcc_def_macro</span>
+<span class=err>$</span> <span class=p>.</span><span class=o>/</span><span class=n>gcc_def_macro</span>
+<span class=n>Defined</span> <span class=n>DEBUG</span><span class=p>(</span><span class=mi>512</span><span class=p>)</span> <span class=n>macro</span>
+<span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>ggdb3</span> <span class=o>-</span><span class=n>Wall</span> <span class=o>-</span><span class=n>DDEBUG</span><span class=o>=</span><span class=mi>512</span> <span class=o>-</span><span class=n>UDEBUG</span> <span class=n>gcc_def_macro</span><span class=p>.</span><span class=n>c</span> <span class=o>-</span><span class=n>o</span> <span class=n>gcc_def_macro</span>
+<span class=err>$</span> <span class=p>.</span><span class=o>/</span><span class=n>gcc_def_macro</span>
+<span class=n>Not</span> <span class=n>defined</span> <span class=n>DEBUG</span></code></pre></td></tr></table></div></div><h3 id=gcc-o-选项><code>gcc -O</code>选项</h3><p>使用<code>man gcc</code>然后搜索&ndash;help=optimizers</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=err>$</span> <span class=n>gcc</span> <span class=o>-</span><span class=n>Q</span> <span class=o>--</span><span class=n>help</span><span class=o>=</span><span class=n>optimizers</span>
+<span class=n>The</span> <span class=n>following</span> <span class=n>options</span> <span class=n>control</span> <span class=nl>optimizations</span><span class=p>:</span>
+  <span class=o>-</span><span class=n>O</span><span class=o>&lt;</span><span class=n>number</span><span class=o>&gt;</span>
+  <span class=o>-</span><span class=n>Ofast</span>
+  <span class=o>-</span><span class=n>Og</span>
+  <span class=o>-</span><span class=n>Os</span>
+  <span class=o>-</span><span class=n>faggressive</span><span class=o>-</span><span class=n>loop</span><span class=o>-</span><span class=n>optimizations</span> 	<span class=p>[</span><span class=n>enabled</span><span class=p>]</span>
+  <span class=o>-</span><span class=n>falign</span><span class=o>-</span><span class=n>functions</span>           		<span class=p>[</span><span class=n>disabled</span><span class=p>]</span>
+  <span class=o>-</span><span class=n>falign</span><span class=o>-</span><span class=n>jumps</span>               		<span class=p>[</span><span class=n>disabled</span><span class=p>]</span>
+  <span class=o>-</span><span class=n>falign</span><span class=o>-</span><span class=n>labels</span>              		<span class=p>[</span><span class=n>disabled</span><span class=p>]</span>
+  <span class=o>-</span><span class=n>falign</span><span class=o>-</span><span class=n>loops</span>               		<span class=p>[</span><span class=n>disabled</span><span class=p>]</span>
+  <span class=p>......</span>
+  <span class=o>-</span><span class=n>fasynchronous</span><span class=o>-</span><span class=n>unwind</span><span class=o>-</span><span class=n>tables</span> 		<span class=p>[</span><span class=n>enabled</span><span class=p>]</span>
+  <span class=o>-</span><span class=n>fbranch</span><span class=o>-</span><span class=n>count</span><span class=o>-</span><span class=n>reg</span>          		<span class=p>[</span><span class=n>disabled</span><span class=p>]</span>
+  <span class=o>-</span><span class=n>fbranch</span><span class=o>-</span><span class=n>probabilities</span>      		<span class=p>[</span><span class=n>disabled</span><span class=p>]</span>
+  <span class=o>-</span><span class=n>fbranch</span><span class=o>-</span><span class=n>target</span><span class=o>-</span><span class=n>load</span><span class=o>-</span><span class=n>optimize</span> 	<span class=p>[</span><span class=n>disabled</span><span class=p>]</span>
+  <span class=o>-</span><span class=n>fbranch</span><span class=o>-</span><span class=n>target</span><span class=o>-</span><span class=n>load</span><span class=o>-</span><span class=n>optimize2</span> 	<span class=p>[</span><span class=n>disabled</span><span class=p>]</span>
+  <span class=o>-</span><span class=n>fbtr</span><span class=o>-</span><span class=n>bb</span><span class=o>-</span><span class=n>exclusive</span>          		<span class=p>[</span><span class=n>disabled</span><span class=p>]</span></code></pre></td></tr></table></div></div><p>根据<code>man gcc</code>的手册，可以使用如下方式查看<code>-O2</code>和<code>-O3</code>的优化区别：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c> <span class=n>gcc</span> <span class=o>-</span><span class=n>c</span> <span class=o>-</span><span class=n>Q</span> <span class=o>-</span><span class=n>O3</span> <span class=o>--</span><span class=n>help</span><span class=o>=</span><span class=n>optimizers</span> <span class=o>&gt;</span> <span class=o>/</span><span class=n>tmp</span><span class=o>/</span><span class=n>O3</span><span class=o>-</span><span class=n>opts</span>
+ <span class=n>gcc</span> <span class=o>-</span><span class=n>c</span> <span class=o>-</span><span class=n>Q</span> <span class=o>-</span><span class=n>O2</span> <span class=o>--</span><span class=n>help</span><span class=o>=</span><span class=n>optimizers</span> <span class=o>&gt;</span> <span class=o>/</span><span class=n>tmp</span><span class=o>/</span><span class=n>O2</span><span class=o>-</span><span class=n>opts</span>
+ <span class=n>diff</span> <span class=o>/</span><span class=n>tmp</span><span class=o>/</span><span class=n>O2</span><span class=o>-</span><span class=n>opts</span> <span class=o>/</span><span class=n>tmp</span><span class=o>/</span><span class=n>O3</span><span class=o>-</span><span class=n>opts</span> <span class=o>|</span> <span class=n>grep</span> <span class=n>enabled</span></code></pre></td></tr></table></div></div></div><div class=post-copyright><p class=copyright-item><span class=item-title>文章作者</span>
+<span class=item-content>None</span></p><p class=copyright-item><span class=item-title>上次更新</span>
+<span class=item-content>2020-04-11</span></p><p class=copyright-item><span class=item-title>许可协议</span>
+<span class=item-content><a rel="license noopener" href=#https://creativecommons.org/licenses/by-nc-nd/4.0/ target=_blank>CC BY-NC-ND 4.0</a></span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/development/>Development</a>
+<a href=/tags/gcc/>GCC</a></div><nav class=post-nav><a class=next href=/post/gdb/><span class="next-text nav-default">GDB常用命令</span>
+<span class="next-text nav-mobile">下一篇</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:your@email.com class="iconfont icon-email" title=email></a><a href=http://localhost:1313/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>由 <a class=hexo-link href=https://gohugo.io>Hugo</a> 强力驱动</span>
+<span class=division>|</span>
+<span class=theme-info>主题 -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span><div class=busuanzi-footer><span id=busuanzi_container_site_pv>本站总访问量 <span id=busuanzi_value_site_pv><img src=/img/spinner.svg alt=spinner.svg></span> 次</span>
+<span class=division>|</span>
+<span id=busuanzi_container_site_uv>本站总访客数 <span id=busuanzi_value_site_uv><img src=/img/spinner.svg alt=spinner.svg></span> 人</span></div><span class=copyright-year>&copy;
+2020
+<span class=heart><i class="iconfont icon-heart"></i></span><span class=author>None</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/dist/even.26188efa.min.js></script></body></html>
